@@ -1,0 +1,851 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyARS - from python to ARS &mdash; pyARS 1.8.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.8.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyARS 1.8.2 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/ergorion_logo_klein.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyARS - from python to ARS</a></li>
+<li><a class="reference internal" href="#changes-in-1-8-2-2015-03-08">Changes in 1.8.2 (2015-03-08)</a></li>
+<li><a class="reference internal" href="#changes-in-1-8-1-2014-07-18">Changes in 1.8.1 (2014-07-18)</a></li>
+<li><a class="reference internal" href="#changes-in-1-8-0-2012-12-10">Changes in 1.8.0 (2012-12-10)</a></li>
+<li><a class="reference internal" href="#changes-in-1-7-2-2012-06-21">Changes in 1.7.2 (2012-06-21)</a></li>
+<li><a class="reference internal" href="#changes-in-1-7-1-2012-03-30">Changes in 1.7.1 (2012-03-30)</a></li>
+<li><a class="reference internal" href="#changes-in-1-7-0-2012-02-17">Changes in 1.7.0 (2012-02-17)</a></li>
+<li><a class="reference internal" href="#changes-in-1-6-0-2011-12-05">Changes in 1.6.0 (2011-12-05)</a></li>
+<li><a class="reference internal" href="#changes-in-1-5-0-2010-12-24">Changes in 1.5.0 (2010-12-24)</a></li>
+<li><a class="reference internal" href="#changes-in-1-4-5-2010-02-24">Changes in 1.4.5 (2010-02-24)</a></li>
+<li><a class="reference internal" href="#changes-in-1-4-0-2010-01-29">Changes in 1.4.0 (2010-01-29)</a></li>
+<li><a class="reference internal" href="#changes-in-1-3-5-2010-01-08">Changes in 1.3.5 (2010-01-08)</a></li>
+<li><a class="reference internal" href="#changes-in-1-3-0-2009-12-22">Changes in 1.3.0 (2009-12-22)</a></li>
+<li><a class="reference internal" href="#changes-in-1-2-5-2009-09-17">Changes in 1.2.5 (2009-09-17)</a></li>
+<li><a class="reference internal" href="#changes-in-1-2-2-2009-05-30">Changes in 1.2.2 (2009-05-30)</a></li>
+<li><a class="reference internal" href="#changes-in-1-2-1-2009-05-30">Changes in 1.2.1 (2009-05-30)</a></li>
+<li><a class="reference internal" href="#changes-in-1-2-0-2009-05-25">Changes in 1.2.0 (2009-05-25)</a></li>
+<li><a class="reference internal" href="#changes-in-1-1-0-2009-04-05">Changes in 1.1.0 (2009-04-05)</a></li>
+<li><a class="reference internal" href="#changes-in-1-0-2-2008-08-28">Changes in 1.0.2 (2008-08-28)</a></li>
+<li><a class="reference internal" href="#changes-in-1-0-1-2008-03-14">Changes in 1.0.1 (2008-03-14)</a></li>
+<li><a class="reference internal" href="#changes-in-1-0-0-2008-02-26">Changes in 1.0.0 (2008-02-26)</a></li>
+<li><a class="reference internal" href="#changes-in-0-9-9-2007-08-13">Changes in 0.9.9 (2007-08-13)</a></li>
+<li><a class="reference internal" href="#changes-in-0-9-8-2006-12-15">Changes in 0.9.8 (2006-12-15)</a></li>
+<li><a class="reference internal" href="#changes-in-0-9-7-2006-08-27">Changes in 0.9.7 (2006-08-27)</a></li>
+<li><a class="reference internal" href="#changes-in-0-9-6-2006-08-05">Changes in 0.9.6 (2006-08-05)</a></li>
+<li><a class="reference internal" href="#changes-in-0-9-5-2006-06-01">Changes in 0.9.5 (2006-06-01)</a></li>
+<li><a class="reference internal" href="#changes-in-0-9-4-2006-02-09">Changes in 0.9.4 (2006-02-09)</a></li>
+<li><a class="reference internal" href="#changes-in-0-8-8-2006-01-16">Changes in 0.8.8 (2006-01-16)</a></li>
+<li><a class="reference internal" href="#changes-in-0-8-7-2006-01-16">Changes in 0.8.7 (2006-01-16)</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/changes.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyars-from-python-to-ars">
+<h1>pyARS - from python to ARS</h1>
+</div>
+<div class="section" id="changes-in-1-8-2-2015-03-08">
+<h1>Changes in 1.8.2 (2015-03-08)</h1>
+<ul class="simple">
+<li>pyars.ars: Fixed a bug in all versions of ARSetActiveLink (thanks to an anonymous bug reporter)</li>
+<li>pyars.cars: fixed a bug in the 1.8.1 distribution that contained all asserts for version 8.0 and 8.1.
+On linux, the asserts would fail and break pyars. This bug was reported by a couple of people.</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-8-1-2014-07-18">
+<h1>Changes in 1.8.1 (2014-07-18)</h1>
+<ul class="simple">
+<li>pyars.ars: Beginning support for 8.0.0 and 8.1.0</li>
+<li>pyars.erars: Beginning support for 8.0.0 and 8.1.0</li>
+<li>pyars.ars: It seems that ARGetListImage (when used with a 8.1.0 lib) gives an error.
+I need to look into this...</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-8-0-2012-12-10">
+<h1>Changes in 1.8.0 (2012-12-10)</h1>
+<ul class="simple">
+<li>pyars.cars: experimental support for 64bit (for 7.5 and higher). It works under Solaris
+and Windows, but crashes under Linux. I also had to change the way how the code detects 64bit
+mode (for Windows 64/32bit systems).</li>
+<li>pyars.ars: changed the signature of ARMergeEntry by removing the last (optional) argument entryId.</li>
+<li>pyars.erars: changed the signature of MergeEntry by removing the last (optional) argument entry.</li>
+<li>pyars.erars: cleaned up the code and refactored all conversions of ARQualifierStruct
+into a new method conv2QualifierStruct (affecting GetEntryStatistics,
+GetListEntry, GetListEntryWithFields, GetListEntryBlocks</li>
+<li>pyars.erars: ServiceEntry has received automatic conversion of pythonic arguments to
+C structures.</li>
+<li>pyars.erars: GetOneEntryWithFields has received automatic conversion of pythonic arguments to
+C structures.</li>
+<li>pyars.erars: introduced new conversion method convObjectChangeTimestampList2List.
+The method GetObjectChangeTimes now returns a pythonic list instead of the
+C structure.</li>
+<li>pyars.erars: enhanced the conversion routines (conv2AR...): if they receive
+already a C structure of this type, they just return it again. This makes
+it simpler to write the calling functions - they don&#8217;t have to check for
+the appropriate type. All conversion routines have appropriate tests as well.</li>
+<li>pyars.erars: GetFieldTable will raise ARError in case of failures.</li>
+<li>pyars.erars: GetAllFieldNames will raise ARError in case of failures.</li>
+<li>pyars.tests: adapted all data structure tests for 64bit</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-7-2-2012-06-21">
+<h1>Changes in 1.7.2 (2012-06-21)</h1>
+<ul class="simple">
+<li>pyars.erars: changed convValueStruct2Value to cope with VIEW fields as well.
+In addition, if it hits an unknown value type, it will no longer simply
+return None, but raise an exception.</li>
+<li>pyars.erars: changed the exception ARError so that it can take an optional
+parameter message text and message type; if they are set, they will be
+used for this exception, instead of the API status list.</li>
+<li>pyars.erars: changed more methods to raise ARError exceptions instead of signalling
+errors just in errnr: GetListEntry and GetListEntryWithFields will raise
+ARError exceptions if the qualification cannot be built, the sort list or
+getlistfields could not be constructed or the search raised an error.</li>
+<li>pyars.erars: GetEntryBlock and GetListEntryBlocks raise ARError exceptions.</li>
+<li>pyars.erars: CreateEntry, GetEntry, GetMultipleEntries, MergeEntry, SetEntry,
+SetGetEntry raise ARError exceptions.</li>
+<li>pyars.erars: GetListImage raises ARError exceptions.</li>
+<li>pyars.erars: GetMultipleCharMenus now supports that you hand over a pythonic
+list of names of schemas to be retrieved.</li>
+<li>pyars.erars: GetMultipleContainers now supports that you hand over a pythonic
+list of names of containers to be retrieved.</li>
+<li>pyars.erars: GetMultipleEscalations now supports that you hand over a pythonic
+list of names of escalations to be retrieved (patch supplied by Bruno Piaui).</li>
+<li>pyars.erars: GetMultipleFilters now supports that you hand over a pythonic
+list of names of filters to be retrieved (patch supplied by Bruno Piaui).</li>
+<li>pyars.erars: GetMultipleImages now supports that you hand over a pythonic
+list of names of schemas to be retrieved.</li>
+<li>pyars.erars: GetMultipleSchemas now supports that you hand over a pythonic
+list of names of schemas to be retrieved.</li>
+<li>pyars.cars: enhanced the ars_const dictionary to resolve many more
+constants in 7.6.3 and 7.6.4.</li>
+<li>pyars.ars_test: fixed a bug where a test would report a false positive
+under cygwin.</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-7-1-2012-03-30">
+<h1>Changes in 1.7.1 (2012-03-30)</h1>
+<ul class="simple">
+<li>pyars.erars: fixed a bug in GetMultipleActiveLinks which would not run
+with servers V7.5 or higher. I also changed the documentation of the default
+parameters so that they show False as their default setting. By changing to
+named parameters, it should be more resilient against future parameter
+changes.</li>
+<li>pyars.erars: fixed a similar bug in GetMultipleSchemas which would not run
+with servers V7.6.03 or higher. By changing to
+named parameters, it should be more resilient against future parameter
+changes.</li>
+<li>pars.erars: fixed GetMultipleEscalations to allow for more parameters
+(similarly to GetMultipleFilters &#8211; thanx to a hint from Bruno Piaui).</li>
+<li>erars_test: enhanced the tests to catch both bugs mentioned above</li>
+<li>pyars.ars: I believe that redefinition of ARFilterStruct and ARFilterList
+for version 7.6.03 of the API was redundant; I have now commented it out,
+if no problems occur, I will remove it with the next release.</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-7-0-2012-02-17">
+<h1>Changes in 1.7.0 (2012-02-17)</h1>
+<ul>
+<li><p class="first">pyars.cars: support cygwin (based on a patch supplied by Yves Jaeger). As on
+ordinary Windows systems, you can define the search path for the BMC
+libraries (the normal windows dlls) using the PATH environment variable;
+if pyARS should also search for the installation directory of user or admin
+tool (path information stored in the Windows registry), you need the <a class="reference external" href="http://pypi.python.org/pypi/cygwinreg/">additional module
+cygwinreg</a></p>
+</li>
+<li><p class="first">pyars.cars: support later linux versions where sys.platform is now &#8216;linux3&#8217;.</p>
+</li>
+<li><p class="first">pyars.erars: made ARError more robust in case that the status list is empty.</p>
+</li>
+<li><p class="first">pyars.erars: implemented remaining methods from 7.6: CreateActiveLink,
+CreateCharMenu, CreateEscalation, CreateField, CreateFilter, Export, GetMultipleFields,
+including undocumented Task functions.</p>
+</li>
+<li><p class="first">pyars.erars.SetServerInfo: made this function more pythonic, based on a patch
+supplied by Sergey Klevtsov: Added a method named &#8216;conv2ServerInfoList&#8217; which
+converts a pythonic dict/list/tuple into a cars ARServerInfoList struct.
+Modified erars.erARS.SetServerInfo to call this method before passing the
+argument on to ars. It is now possible to use it like this:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ars</span><span class="o">.</span><span class="n">SetServerInfo</span><span class="p">({</span><span class="n">cars</span><span class="o">.</span><span class="n">AR_SERVER_INFO_DEBUG_MODE</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+    <span class="n">cars</span><span class="o">.</span><span class="n">AR_SERVER_INFO_FILTER_LOG_FILE</span><span class="p">:</span> <span class="s">&#39;/opt/ar/remedy/db/filter.log&#39;</span><span class="p">})</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">ars.ARGetListImage: does not require a schemaList any more; it will then
+retrieve a list of all image names</p>
+</li>
+<li><p class="first">erars.GetListImage: has been improved to be more pythonic version: you can now
+hand over lists, and will receive a list.</p>
+</li>
+<li><p class="first">ars.ARGetImage: fixed a bug that made retrieving images impossible</p>
+</li>
+<li><p class="first">pyars.ars: fixed a bug when printing out the path for non-windows OSes.</p>
+</li>
+<li><p class="first">pyars._cars*.py: moved all of the asserts into their own test files in preparation
+supporting 64bit. The side effect is that startup of your normal python scripts is faster.</p>
+</li>
+<li><p class="first">ars_test.py: fixed a crash when using 7.0 libs</p>
+</li>
+<li><p class="first">ars_test.py: improved the test coverage</p>
+</li>
+<li><p class="first">ars_test.py: fixed a test to make sure it will run on completely new
+installs as well.</p>
+</li>
+<li><p class="first">ars_test.py: fixed a couple of places to make sure that it runs with Remedy 5.1
+still.</p>
+</li>
+<li><p class="first">pyars.ars: fixed a bug in ARGetSchema to run with Remedy 5.1.</p>
+</li>
+<li><p class="first">pyars.cars: first steps for supporting 64bit libs (only started, does not work yet)</p>
+</li>
+<li><p class="first">pyars.setup: cleaned up the setup file so that the docs and tests are now
+part of the package. They are now properly distributed in the source
+distribution (.zip file), but somehow fail to install properly.</p>
+</li>
+<li><p class="first">documentation: Finally I have managed to complete the transition to the
+rst format and sphinx as the documentation generation tool. Also the
+template now matches my preferences.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-6-0-2011-12-05">
+<h1>Changes in 1.6.0 (2011-12-05)</h1>
+<ul>
+<li><p class="first">pyars.ars: Beginning support for 7.6.4</p>
+</li>
+<li><p class="first">pyars.erars: now supports python context managers (starting with
+Python 2.5); you can now write:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyars.erars</span> <span class="kn">import</span> <span class="n">erARS</span>
+<span class="k">with</span> <span class="n">erARS</span><span class="p">(</span><span class="s">&#39;server:port&#39;</span><span class="p">,</span> <span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">ars</span><span class="p">:</span>
+    <span class="n">schemas</span><span class="o">=</span><span class="n">ars</span><span class="o">.</span><span class="n">GetListSchema</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>and it will make sure that at the end of the context manager, an
+ars.Logoff() will be executed.</p>
+</li>
+<li><p class="first">pyars.erars: improved the exception handling of own exceptions. If
+you now raise ARError with a session object as a parameter, the exception
+will retrieve the error information from the session status list (similar to
+what ars.statusText() gives you). The limitation is that the exception will
+take info only from the first entry in this status list.</p>
+</li>
+<li><p class="first">pyars.ars: changed the exception from NotImplemented to pyARSNotImplemented
+as NotImplemented is a reserved type.</p>
+</li>
+<li><p class="first">pyars.cars: Following up on the change in naming conventions with AR7.6,
+I had to change the way, how pyars tries to load the shared libs. This time,
+the solution should be flexible enough for future ideas from BMC...</p>
+</li>
+<li><p class="first">pyars.erars: GetMultipleActiveLinks now allows for a python list/tuple
+as parameter for nameList.</p>
+</li>
+<li><p class="first">pyars.erars: GetEntry now returns a tuple (name, origSize, compSize)
+for attachment fields (if there is an attachment); the name will be returned
+as unicode if you are logged in with charSet=&#8217;utf-8&#8217;.
+In addition, for coordinates, it
+now returns a list of (x, y) pairs. Basically the function
+convValueStruct2Value does this now properly.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-5-0-2010-12-24">
+<h1>Changes in 1.5.0 (2010-12-24)</h1>
+<ul class="simple">
+<li>pyars.cmdb: following the documentation of changes in 7.5, I accidentally
+implemented the CMDB(Get, Set)MultipleInstances functions multiple times.
+Removed the redundancies. If you are running this against CMDB 7.5 or later,
+the return type changes from (cars.ARBooleanList, ccmdb.CMDBAttributeValueListList)
+to (ccmdb.ARBooleanList, ccmdb.CMDBAttributeValueListList).</li>
+<li>pyars.ars: first step to support ARS 7.6.3</li>
+<li>pyars.ars: fixed a bug in ARDeleteFilter which would ignore the
+parameter deleteOption.</li>
+<li>pyars.ars: changed the signature of  ARMergeEntry; you can now define
+the entryId for this call.</li>
+<li>pyars.erars: fixed a bug in MergeEntry; also changed the signature of
+MergeEntry; you can now define the entryId for this call.</li>
+<li>pyars.erars: fixed a bug in conv2EntryIdList for joins of join
+forms (discovered by Giulio Galante).</li>
+<li>pyars.cars: Thanx to a change in naming conventions with AR7.6,
+I had to change the way, pyars tries to load the shared libs. With this fix, I
+also changed the loading under Windows: So far, pyars.cars would immediately
+add the registry information about Remedy installations to the PATH environment
+variable. Now it first tries to load the different versions with the standard
+PATH environment, before adding the registry information and doing it all
+again. With this change, it&#8217;s now possible to use the PATH environment
+variable to load a specific DLL (e.g. version 7.1) while you have installed
+a newer version of the User tool.</li>
+<li>cmdb.CMDBGetMultipleInstances: datasetId is no longer an optional
+argument.</li>
+<li>pyars.ars and pyars.erars: changed a couple of minor bugs identified
+by pylint</li>
+<li>pyars.cmdb and pyars.ercmdb: changed a couple of minor bugs identified
+by pylint</li>
+<li>erars.conv2EntryIdList: if entryid is a unicode string, try to
+convert it to plain ascii.</li>
+<li>pyars.ars_test: fixed a couple of minor test bugs. Included a patch
+by Giulio Galante.</li>
+<li>pyars now has experimental Linux support. If you want to test this,
+please contact me (axel at ergorion . com), as you have to patch
+your python interpreter currently (a very minor and trivial patch that
+allows a bigger alignment than is currently the system default).</li>
+<li>documentation format has been changed from docbook xml to rst. I&#8217;m
+still fighting with the templates.</li>
+<li>pyars.cmdb: following the documentation of changes in 7.5, I accidentally
+implemented the CMDB(Get, Set)MultipleInstances functions multiple times.
+Removed the redundancies. If you are running this against CMDB 7.5 or later,
+the return type changes from (cars.ARBooleanList, ccmdb.CMDBAttributeValueListList)
+to (ccmdb.ARBooleanList, ccmdb.CMDBAttributeValueListList).</li>
+<li>cmdb.CMDBGetMultipleInstances: datasetId is no longer an optional
+argument.</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-4-5-2010-02-24">
+<h1>Changes in 1.4.5 (2010-02-24)</h1>
+<ul class="simple">
+<li>pyars.cmdb: implemented the new bulk instance functions from
+Atrium 7.5 (CMDBCreateMultipleInstances, CMDBDeleteMultipleInstances,
+CMDBGetMultipleInstances, CMDBSetMultipleInstances)</li>
+<li>pyars.cmdb: implemented the graph query functions from Atrium 7.5:
+CMDBQueryByPath, CMDBGraphWalkBegin, CMDBGraphWalkNext, CMDBGraphWalkEnd.</li>
+<li>pyars.cmdb: implemented a couple of undocumented functions from Atrium 7.5:
+CMDBCreateImpact, CMDBGetImpact, CMDBSetImpact, CMDBDeleteImpact,
+CMDBSetUserSessionGUID</li>
+<li>provide many more cmdb.CMDB* functions as ercmdb.* counterparts
+and update many docstrings in the process</li>
+<li>ercmdb.GetListClass: now returns a pythonic list of class names</li>
+<li>cmdb: set default logging.LEVEL to INFO (the same it is in ars)</li>
+<li>ercmdb.GetListInstance: now returns a very nice and pythonic
+result: (list of (instance id1, dict1 {attr: value, ...}), (instance id2, dict2), ...
+numMatches)</li>
+<li>ercmdb.GetInstance: fixed a bug and changed the return value to
+a nice pythonic dictionary.</li>
+<li>erARS.GetAllFieldNames: fixed a bug with a non-bound variable</li>
+<li>erars_test: added a couple of test cases</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-4-0-2010-01-29">
+<h1>Changes in 1.4.0 (2010-01-29)</h1>
+<ul class="simple">
+<li>erars: introduced APIVersion(), GetControlStructFields(),
+GetFieldByName(), errstr()</li>
+<li>erars.GetServerStatistics: changed the return type; it now
+automatically converts the ARServerInfoList to a dictionary. IF you need
+the old behaviour, please use ars.ARGetServerStatistics.</li>
+<li>erars.GetServerInfo: changed the return type of  from ARServerInfoList
+to a pythonic list, with all values already being converted into Python types;
+in addition, the parameter was made optional; if you don&#8217;t hand over any specific
+info items, you will receive the full list.</li>
+<li>erars.GetListGroup: changed return type from the low level C data
+structure ARGroupInfoList to python dictionary. If this change affects you,
+simply use the erars.ARGetListSQL with the same parameters.</li>
+<li>erars.GetListSchemaWithAlias: changed return type from two lists
+((list of schema names), (list of alias names) to a list of
+((schema1, alias 1), (schema 2, alias 2), ...)</li>
+<li>erars.GetListSQL: changed return type from ARValueListList to a
+pythonic list. If this change affects you, simply use the erars.ARGetListSQL with
+the same parameters.</li>
+<li>fixed a bug in erars.GetFieldTable()</li>
+<li>erars.GetCharMenu: fixed the documentation of the return value</li>
+<li>erars: The following functions now support that you hand over either
+None, ARQualifierStruct or a string as a query parameter: GetEntryStatistics,
+GetListEntry, GetListEntryWithFields, GetListEntryBlocks</li>
+<li>ars.GetCurrentServer(): renamed to ars.ARGetCurrentServer() and
+introduced erars.GetCurrentServer() to be more inline with naming conventions.</li>
+<li>ars.AREncodeARAssignStruct:  changed the return type to return the string
+value directly instead of the c_char_p to the string.</li>
+<li>ars.AREncodeDiary: changed the return type to return the string
+value directly instead of the c_char_p to the string.</li>
+<li>ars.AREncodeStatusHistory: changed the return type to return the string
+value directly instead of the c_char_p to the string.</li>
+<li>enhanced the test suite</li>
+<li>enhanced the tutorial</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-3-5-2010-01-08">
+<h1>Changes in 1.3.5 (2010-01-08)</h1>
+<ul class="simple">
+<li>updated &amp; added all function definitions for CMDB API 2.1</li>
+<li>changed the definition of the default dataset for Atrium 7.5 and
+later from BMC_ASSET to BMC.ASSET.</li>
+<li>pyars.cmdb: CMDBRunQualificationForCI did not have the parameter
+datasetId in version 2.0 of the API &#8211; was removed there.</li>
+<li>pyars.cmdb: CMDBExpandParametersForCI did not have the parameter
+datasetId in version 2.0 of the API &#8211; was removed there.</li>
+<li>first part to support CMDB API Version 7.5 and 7.6 implemented (the
+constants, but no changes to functions yet).</li>
+<li>changed the structure of version checks for constructing the
+CMDB class heirarchy (brought it inline with how pyars.ars creates
+the class hierarchy). Did the same in pyars.erars.</li>
+<li>moved the definition of CMDBClassStruct and CMDBClassList
+from pyars.cmdb to pyars.ercmdb (finalise the change started in 1.3.0).</li>
+<li>fixed a bug in CMDBREGetListJobRun and changed the return type
+in case of failure to be (None, errnr).</li>
+<li>pyars.ars: fixed a relative import which was not really necessary;
+but in porting this relative import to p3k, I introduced a syntax that
+broke compatibility with python 2.3 and 2.4. Fixing this showed another anomaly in
+ars_test with python 2.3. Instead of fixing this, for now, the support of
+Python 2.3 is dropped. If this is of concern, please let me know.</li>
+<li>changed the return type of pyars.ars.ARGetCacheEvent to be
+(None, errnr) in case of failure.</li>
+<li>updated the tutorials.</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-3-0-2009-12-22">
+<h1>Changes in 1.3.0 (2009-12-22)</h1>
+<ul class="simple">
+<li><em>Attention, incompatible change of return type of method erARS.GetListEntry</em>:
+it used to return a dictionary of {entryid: search_result_string, ..} &#8211; but with this
+dictionary you loose the order of entries as returned by the server
+(via pyars.ARGetListEntry).
+That&#8217;s why I had to change it to a list ((entryid, search_result_string), ...).
+In addition, in case of error, you will not receive a single None, but you
+will get a list (None, -1), so that assigning the result to two variables is
+simplified.
+If this change affects you, you only have to use the new list as input parameter to
+the dict() function &#8211; and you will get the dictionary as you used to.</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">(</span><span class="n">entryList</span><span class="p">,</span> <span class="n">numMatches</span><span class="p">)</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">GetListEntry</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">ars</span><span class="o">.</span><span class="n">errnr</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="c"># error handling</span>
+    <span class="k">pass</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">entryDict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">entryList</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>Attention, incompatible change of return type of method erARS.GetListEntryWithFields:
+it used to return a dictionary of {entryid: {fid1 : value1, ...}, ..} &#8211; but with this
+dictionary you loose the order of entries as returned by the server
+(via pyars.ARGetListEntryWithFields).
+That&#8217;s why I had to change it to a list ((entryid, {fid1 : value1, ...}), ...).
+In addition, in case of error, you will not receive a single None, but you
+will get a list (None, -1), so that assigning the result to two variables is
+simplified.
+If this change affects you, you only have to use the new list as input parameter to
+the dict() function &#8211; and you will get the dictionary as you used to.</li>
+<li>removed some old code from erars (including some functions that
+were never supported nor published)</li>
+<li>removed experimental code that raised an exception in ARGetField if
+the function called returned an error code; this exception is now raised in
+GetField instead.</li>
+<li>GetListSchemaWithAlias: changed the return from (ARNameList, ARNameList)
+to the more pythonic version of (list_of_schema_names, list_of_alias_names)
+like: ((name1, name2,...), (name1, name2, ...))</li>
+<li>during __init__ of the ars object, the control struct
+(ars.context) is now set to None, and only Login will set it to a real
+ARControlStruct; thus, you can identify if a Login has happend by checking
+for ars.context being not None.</li>
+<li>further improve unicode handling in erars.GetEntry.</li>
+<li>preparation to support IronPython has started, but a couple of more
+rough edges need to be straightened out (on the IronPython side) before this
+will work. Turns out, currently IronPython does not support C unions. We have
+currently two issues open with IronPython (24814 and 25106)</li>
+<li>improved the erars_test.py unit tests; they should now also run
+through under Solaris. And you can enforce that it runs with a client library
+version different from the server version with -f.</li>
+<li>made the code to identify the used CMDB version more robust and
+prepared pyars.cmdb for the versions 2.1, 7.5 and 7.6 (no code to
+support new functionality yet).</li>
+<li>made the implementation follow the documentation that says the default
+for the logging.LEVEL is INFO (which so far actually was DEBUG). So, don&#8217;t
+be surprised if your code does not spit out any debugging info any more. Please
+see the tutorial for instructions how to change this.</li>
+<li>changed the signature of pyars.cmdb.CMDBGetClass to be more inline
+with the C version &#8211; the output parameters need to be handed over to the
+python function as well, and there you will find the result. The
+pyars.ercmdb.GetClass in contrast, still just takes the name of the class
+and does the rest for you.</li>
+<li>fixed a couple of bugs in cmdb_test.</li>
+<li>updated some more docstrings</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-2-5-2009-09-17">
+<h1>Changes in 1.2.5 (2009-09-17)</h1>
+<ul class="simple">
+<li>7.5: fixed a bug where the change of constant naming from
+AR_KEYWORD_FILTER_ERRNO to AR_KEYWORD_ERRNO would stop pyars at import time.</li>
+<li>7.5: fixed a bug in ARActiveLinkStruct (one of the members had a trailing ,)</li>
+<li>7.5: fixed a bug in ARGetActiveLink</li>
+<li>7.5: added an updated version of ARGetMultipleActiveLink to support
+the 7.5 features</li>
+<li>7.5: added many lookup dictionary entries for 7.5 specific enhancements
+to cars.py</li>
+<li>made cars.py more robust against potential constant naming failures
+in the future</li>
+<li>erARS can now cope with Unicode chars. pyars.ars always could do this,
+but erARS tried to convert only normal strings. If you want to see how to cope
+with Unicode chars, please see the tutorial.</li>
+<li>extensive updates to the documentation, especially the tutorial.</li>
+<li>erars.GetFieldTable has now a third parameter fieldType that allows
+you to specify which type of fields should be used for the dictionary of
+fieldid : name. The default is cars.AR_FIELD_TYPE_DATA, so that the dictionary
+maps all data fields to fieldids.</li>
+<li>erARS.conv2EntryIdList: does not try to pad the entryid any more.
+If you need this, you have to call ars.padEntryid on the entryid yourself
+before calling conv2EntryIdList.</li>
+<li>support for python3k: please note, that work started on this, but
+it does not work yet...</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-2-2-2009-05-30">
+<h1>Changes in 1.2.2 (2009-05-30)</h1>
+<ul class="simple">
+<li>erARS.conv2ValueStruct: now supports attachment filenames; in other
+words, you can now also use SetEntry for attachments with the list structure
+and do not need to rely on the C level API ARSetEntry (see tutorial for an
+example).</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-2-1-2009-05-30">
+<h1>Changes in 1.2.1 (2009-05-30)</h1>
+<ul class="simple">
+<li>implemented wrappers for most of the 7.5 functions (ARWfd* in
+addition to the AR*Image functions).</li>
+<li>regenerated the pydoc documentation to include the 7.5 headers</li>
+<li>updated many docstrings to better show the required ctype
+of arguments</li>
+<li>changed the signature of ARCreateActiveLink and CreateActiveLink: now also the parameters
+controlField, focusField, enable, query, actionList and elseList are optional.</li>
+<li>changed the signature of ARCreateCharMenu and CreateCharMenu: helpText, owner,
+changeDiary and objPropList are now optional.</li>
+<li>changed the signature of ARCreateContainer and CreateContainer: helpText, owner,
+changeDiary and objPropList are now optional.</li>
+<li>changed the signature of ARCreateEscalation and CreateEscalation: query, actionlist,
+elseList, helpText, owner, changeDiary and objPropList are now optional.</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-2-0-2009-05-25">
+<h1>Changes in 1.2.0 (2009-05-25)</h1>
+<ul class="simple">
+<li>added two new members to ARActiveLinkStruct and changed all
+ARActiveLink related
+functions (ARCreateActiveLink, ARGetActiveLink, ARSetActiveLink,
+ARGetActiveLinkFromXML, ARSetActiveLinkToXML)</li>
+<li>implemented the image related functions (ARCreateImage, ARDeleteImage,
+ARGetImage, ARGetListImage, ARGetMultipleImages, ARSetImage)</li>
+<li>implemented other 7.5 functions:
+ARGetCacheEvent, ARGetListEntryWithMultiSchemaFields, ARGetObjectChangeTimes,
+ARGetOneEntryWithFields, ARSetDSOPoolToXML</li>
+<li>still outstanding are all ARWfd... functions</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-1-0-2009-04-05">
+<h1>Changes in 1.1.0 (2009-04-05)</h1>
+<ul class="simple">
+<li>A completely new module on top of pyars, called erars,
+makes it possible, to work seamlessly with Python data structures. Thus you are
+not forced to work with Remedy data structures any more. At least, that&#8217;s the
+goal; until now we made sure to cover the ARxxxEntry functions.</li>
+<li>ARExport: Changed the return value to return a python str instead
+of c_char_p. So, no need to access the value via .value any more.</li>
+<li>ARExportToFile: changed the parameters to be more inline with
+ARExport, in other words, apart from the ARStructItemList all other parameters
+are optional. Unfortunately, the parameter FILE is the last one &#8211; so I could not
+leave it as non-optional, while the other arguments were changed to optional, so
+I had to change this parameter to optional as well, setting the default to
+None. However, this obviously leads to an error, because ARExportToFile does
+not know where to write to.</li>
+<li>has been tested with Python 2.6.</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-0-2-2008-08-28">
+<h1>Changes in 1.0.2 (2008-08-28)</h1>
+<ul class="simple">
+<li>ARGetMultipleFilters has been enhanced to try each filter it cannot
+fetch directly, in a second trial with ARGetFilter. Surprisingly, in our
+environment, ARGetMultipleFilters sometimes has problems retrieving
+filters which exist. And ARGetFilter will happily retrieve this filter for you.
+Now you don&#8217;t have to worry any more.</li>
+<li>Changed pyars to use new style classes.</li>
+<li>Finally I managed to get ctypes working under Solaris. The library
+loading code in cars.py has been adapted to load the library. Unfortunately,
+ctypes has a limitation so that it does currently not recognize the libar shared
+library under Linux...</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-0-1-2008-03-14">
+<h1>Changes in 1.0.1 (2008-03-14)</h1>
+<ul class="simple">
+<li>This is a bugfix release only, which mainly updates file cars.py to ensure
+that all new variables defined in version 7.0
+and 7.1 are included in the arrays for nicer output (e.g.</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cars</span><span class="o">.</span><span class="n">ars_const</span><span class="p">[</span><span class="s">&#39;AR_SVR_EVENT&#39;</span><span class="p">][</span><span class="n">AR_SVR_EVENT_APPLICATION_ADDED</span><span class="p">]</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>changed a couple of strings in the lookup dictionaries of type
+AR_DPROP and AR_DVAL (cut of the leading AR_DPROP_ and AR_DVAL_).</li>
+<li>updates doc strings of many functions</li>
+</ul>
+</div>
+<div class="section" id="changes-in-1-0-0-2008-02-26">
+<h1>Changes in 1.0.0 (2008-02-26)</h1>
+<ul class="simple">
+<li>This release adds support for the ARSystem API 7.1. The CMDB API 2.1
+is still outstanding.</li>
+<li>Changed the loading of the DLLs and python definition modules once more
+so that it is ok to load new libraries with older python modules. In other
+words, if you install an upgrade of the API library, but don&#8217;t have
+the current python modules for that yet, the python code will still load. Typically
+this should not be a problem as the ARSystem API is backwards compatible.</li>
+<li>Corrected the handling of the parameter helpText and
+changeDiary in all ARCreate- and ARSet- methods.</li>
+<li>Eased the handling of int&#8217;s in ARSetActiveLink,
+ARSetCharMenu, ARSetContainer, ARSetEscalation, ARSetField, ARSetFilter and
+ARSetVUI so that you don&#8217;t have to hand over ctypes, but can use
+normal python integers.</li>
+<li>Added the parameter setFieldOptions to ARSetField.</li>
+<li>Enhanced the tutorial and examples documents.</li>
+</ul>
+</div>
+<div class="section" id="changes-in-0-9-9-2007-08-13">
+<h1>Changes in 0.9.9 (2007-08-13)</h1>
+<ul class="simple">
+<li>This release (up to 1.0) will be the last one to rely solely on the C
+data structures. The next development cycle (V1.1 onward) will concentrate on making
+pyars much more pythonic where you use dicts and lists instead of
+C structs.</li>
+<li>This release has been postponed so long, because I wanted to
+wait for test results against a fully licensed CMDB2.0 server as well as more
+test results from version 7.0.1.</li>
+<li>Login has been overhauled; now you can hand over as parameters
+all the items of an ARLocalizationInfo (e.g. locale and charSet) in order
+to support e.g. unicode as well as cacheId, operationTime and sessionId.</li>
+<li>The following XML support functions have been implemented:
+ARGetFieldFromXML, ARGetFilterFromXML, ARGetMenuFromXML, ARGetListXMLObjects,
+ARGetSchemaFromXML, ARGetVUIFromXML, ARParseXMLDocument,
+ARSetActiveLinkToXML (was implemented before, but has been
+debugged; signature and return value changed!), ARSetContainerToXML,
+ARSetEscalationToXML, ARSetFieldToXML.</li>
+<li>fixed the text mapping in cars.py for the AR_SERVER_INFO
+constants.</li>
+<li>As the XML API functions turn out to be extremely sensitive to missing
+or wrong argument types, we have added a couple of checks and asserts. However,
+those tests need some more work and have therefore been removed from this release.</li>
+<li>Again overhauled the library loading in cars.py/ccmdb.py in order
+to find more spots where the ARsystem libraries might be installed.</li>
+</ul>
+</div>
+<div class="section" id="changes-in-0-9-8-2006-12-15">
+<h1>Changes in 0.9.8 (2006-12-15)</h1>
+<ul class="simple">
+<li>changed the definition of ARBoolean from c_char to c_ubyte; this means, you
+have to check any code that uses ARBooleans (e.g. ARGetMultiple... functions).
+The effect of the change is that you can now simply check for the true or
+false value of the ARBoolen and do not have to use ord(ARBoolean). In addition,
+you can initialize it using the native Python True and False values:
+var = cars.ARBoolean(True)</li>
+<li>cars.py/ccmdb.py: fixed a bug with oldPath (if pyars was not able to load any
+library) and
+reworked the construction of the search path (now searches for user tool as
+well as admin tool in the windows registry).</li>
+<li>cars.py now stores the version information as integer, not string
+any more (cars.version can be 70, 63, 60 etc.). The same holds true for
+the instance variable arversion of ARS instances.</li>
+<li>continued work on unit tests (ars_test.py and cmdb_test.py; currently limited to
+retrieval functions, no changes on the server), see details.html.</li>
+<li>implemented the ARS core 7.0 functions and structure changes
+(e.g. arauditinfo for schema,
+fieldOption for field)</li>
+<li>overhauled the doc strings for the AR functions, fixed documentation bug
+for ARCreateEntry that suggested that the function will automatically convert
+a tuple to the required ARFieldValueList (which it currently does not).
+Unfortunately, the doc strings still are not completely consistent. But you
+should find now all arguments covered for every function.</li>
+<li>ARGetSchema: archiveInfo is now returned to the client properly</li>
+<li>ARGetListEntry now works without a query string (defaults to None).</li>
+<li>ARExportLicense: changed the signature: exportBuf is not an input value any more
+(was too C centric), but is returned by the function.</li>
+<li>GetControlStruct: now returns all fields of the struct (including the errnr)</li>
+<li>ARSetSchemaToXML: fixed a bug with optional arguments not being the right type</li>
+<li>ARValidateFormCache: only one argument remains mandatory (form name);
+mostRecentActLink,
+mostRecentMenu, and mostRecentGuide have now a default value of 0. The return
+values have been modified to return not the ctype ints, but their pythonic
+equivalents.</li>
+<li>ARGetListSQL: now returns a tuple with ARValueListList and the number of items.
+Used to
+return the ARValueListList and the ctypes representation of the number of items.</li>
+<li>ARVerifyUser: now returns a tuple of pythonic booleans, not ARBoolean</li>
+<li>The functions ARSetXMLDocFooter and ARSetXMLDocHeaderToXML (according to old
+Remedy documentation) don&#8217;t exist and were renamed to ARSetDocFooterToXML and
+ARSetDocHeaderToXML.</li>
+<li>ARParseXMLDocument: now correctly returns three values, as of
+API 6.0 and higher.</li>
+<li>Login: now checks the correct return value of ARVerifyUser; in case of failure
+does not display the password any more</li>
+<li>ARDateToJulianDate now returns the python value (and not the c_long).
+In case of failure it will now return None.</li>
+<li>ARExportLicense now returns the string, not the c_char_p to the
+string.</li>
+<li>ARGetApplicationState now returns the string, not the c_char_Array_255
+of the string.</li>
+<li>ARGetAlertCount now returns the int value, not c_ulong any more.</li>
+<li>ARGetListEntryBlocks now returns a tuple of (AREntryBlockList, long, long)
+and not (AREntryBlockList, c_ulong, c_ulong) any more.</li>
+<li>ARGetMultipleEntryPoints: corrected the parameter hand over</li>
+<li>ARFree and its functions should now work correctly.</li>
+<li>implemented the CMDB 2.0 functions and struct changes</li>
+<li>Logoff: now uses the AROSTerminate or CMDBTerminate function call instead of
+the ARTerminate function.</li>
+<li>CMDBCreateGuid: fixed a bug where guid was not defined</li>
+<li>CMDBGetInstance, CMDBGetMultipleInstances,
+CMDBGetServerPort and CMDBSynchMetaData now return None in case of failure
+(not the errnr). The same
+holds true for the four AROS functions (AROSGetInstance, etc.).</li>
+<li>CMDBGetInstance: fixed a bug in parameter handling, and attributeGetList
+can now be left out (default: None).</li>
+<li>CMDBGetServerPort: now returns a tuple of two longs, instead of a tuple of two
+c_longs</li>
+<li>overhauled the doc strings for the CMDB functions</li>
+<li>cars.py/ccmdb.py: overhauled the strings for the ars and cmdb constants
+(cars.ars_const and ccmdb.cmdb_const).</li>
+</ul>
+</div>
+<div class="section" id="changes-in-0-9-7-2006-08-27">
+<h1>Changes in 0.9.7 (2006-08-27)</h1>
+<ul class="simple">
+<li>ARCreateVUI now returns the value of the ctype, in other words, there is no
+need to dereference the value within: so instead of:</li>
+</ul>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">newId</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">ARCreateVUI</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;the new id is: </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">newId</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>you can now write:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">newId</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">ARCreateVUI</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;the new id is: </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">newId</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li>refactored ARExecuteProcess (in case of an error, the return value changed)</li>
+<li>bugfix in my_byref that would return None sometimes incorrectly</li>
+<li>added lookup entries for the values of AR_DPROP_JUSTIFY and
+AR_DPROP_LABEL_POS_JUSTIFY in cars.py</li>
+<li>removed all occurences of errstr from ars.py</li>
+<li>made cars.py a little more robust if registry key for aruser is not found</li>
+</ul>
+</div>
+<div class="section" id="changes-in-0-9-6-2006-08-05">
+<h1>Changes in 0.9.6 (2006-08-05)</h1>
+<ul class="simple">
+<li>removed decl, as ctypes in later versions does not
+offer this by default</li>
+<li>fixed a compatibility issue with ARS V6.0</li>
+</ul>
+</div>
+<div class="section" id="changes-in-0-9-5-2006-06-01">
+<h1>Changes in 0.9.5 (2006-06-01)</h1>
+<ul class="simple">
+<li>couple of minor bugfixes</li>
+</ul>
+</div>
+<div class="section" id="changes-in-0-9-4-2006-02-09">
+<h1>Changes in 0.9.4 (2006-02-09)</h1>
+<ul class="simple">
+<li>nearly all functions mapped, some minor bugfixes</li>
+</ul>
+</div>
+<div class="section" id="changes-in-0-8-8-2006-01-16">
+<h1>Changes in 0.8.8 (2006-01-16)</h1>
+<ul class="simple">
+<li>new functions: ARGetMultipleFilters,
+ARSetVUI, ARCreateVUI</li>
+<li>some minor bugfixes, especially ARGetMultipleVUIs</li>
+</ul>
+</div>
+<div class="section" id="changes-in-0-8-7-2006-01-16">
+<h1>Changes in 0.8.7 (2006-01-16)</h1>
+<ul class="simple">
+<li>some minor bugfixes</li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2004-2015, Axel Seibert.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b3.
+    </div>
+  </body>
+</html>

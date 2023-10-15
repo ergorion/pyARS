@@ -1,0 +1,562 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Tutorial for usage of pyars.erars &mdash; pyARS 1.8.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.8.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyARS 1.8.2 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/ergorion_logo_klein.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Tutorial for usage of pyars.erars</a><ul>
+<li><a class="reference internal" href="#retrieving-a-single-entry">Retrieving a single entry</a></li>
+<li><a class="reference internal" href="#modifying-an-entry">Modifying an entry</a></li>
+<li><a class="reference internal" href="#creating-entries">Creating entries</a></li>
+<li><a class="reference internal" href="#delete-an-entry">Delete an entry</a></li>
+<li><a class="reference internal" href="#working-with-field-names-instead-of-field-ids">Working with field names instead of field ids</a></li>
+<li><a class="reference internal" href="#retrieve-a-list-of-entries">Retrieve a list of entries</a></li>
+<li><a class="reference internal" href="#retrieving-a-certain-subset-of-entries">Retrieving a certain subset of entries</a></li>
+<li><a class="reference internal" href="#retrieving-an-attachment-into-a-buffer">Retrieving an attachment into a buffer</a></li>
+<li><a class="reference internal" href="#retrieving-an-attachment-as-a-file">Retrieving an attachment as a file</a></li>
+<li><a class="reference internal" href="#uploading-an-attachment-as-a-file">Uploading an attachment as a file</a></li>
+<li><a class="reference internal" href="#get-a-list-of-schemas-from-an-arsystem">Get a list of schemas from an ARSystem</a></li>
+<li><a class="reference internal" href="#error-handling">Error handling</a></li>
+<li><a class="reference internal" href="#a-more-detailed-look-at-retrieving-an-entry">A more detailed look at retrieving an entry</a></li>
+<li><a class="reference internal" href="#migrating-from-arsperl">migrating from ARSPerl</a></li>
+<li><a class="reference internal" href="#how-to-proceed">How to proceed</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/tutorial.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="tutorial-for-usage-of-pyars-erars">
+<h1>Tutorial for usage of pyars.erars</h1>
+<p>This tutorial covers the more convenient function wrappers for the
+ARSystem API that you can access using pythonic data structures (as opposed
+to the low level C API functions, which are covered in the <a class="reference external" href="tutorial-ar.html">original tutorial</a>).</p>
+<p>The ARSystem API offers many different function calls to talk to
+the ARSystem server. The pyars.ars module makes them available to Python scripts
+(e.g. ARGetListSchema) &#8211; you have to use the Remedy data structures. When
+migration from an existing C API program, this may be the most appropriate
+way.</p>
+<p>The pyars.erars module offers its own version of
+each API function (without the AR at the beginning, e.g. GetListSchema) that
+you can use with pythonic arguments (lists and tuples instead of
+C based data structures).</p>
+<p>So where is the main difference, you ask? You can either</p>
+<ul class="simple">
+<li>import pyars.ars and use the C level functions (beginning with AR, like
+ARGetEntry) using low level, C data structures</li>
+<li>import pyars.erars and use the more pythonic versions of the wrappers
+(which all have the exact same name as the C level functions, without the
+AR prefix, like GetEntry)</li>
+</ul>
+<p>Having said this, so far mainly the *Entry functions have seen a much nicer
+interface due to the pythonic conversion layer, where you can now use
+dictionaries for retrieving entries, setting entries or retrieving many
+entries at once etc. Also, handing over arguments is now easier, as many
+functions will convert python data structures into the appropriate C
+data structures. Looking at <a class="reference external" href="pyars.erars.html">the generated documentation of
+erARS</a>
+should give you an indication of what you need to handover.</p>
+<p>There is also a module called ercmdb which follows the same
+guidelines and tries to make the CMDB functions better accesible. However,
+as my project currently has no need for this and the user community has not
+cried out for this, it&#8217;s currently a sleeping beauty.</p>
+<div class="section" id="retrieving-a-single-entry">
+<h2>Retrieving a single entry</h2>
+<p>The most often used use case is probably working with entries. Let&#8217;s see,
+how  we can retrieve, modify and create entries... We start with retrieving
+the entry with id &#8216;000000000000001&#8217; from Form User. If this does not
+exist on your server, please modify this example accordingly to match your
+environment.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyars</span> <span class="kn">import</span> <span class="n">erars</span><span class="p">,</span> <span class="n">cars</span>
+<span class="n">ars</span> <span class="o">=</span> <span class="n">erars</span><span class="o">.</span><span class="n">erARS</span><span class="p">()</span>
+<span class="n">ars</span><span class="o">.</span><span class="n">Login</span><span class="p">(</span><span class="s">&#39;server&#39;</span><span class="p">,</span> <span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">)</span>
+<span class="c"># error handling is left as an exercise to the reader :-)</span>
+<span class="n">entry</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">GetEntry</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="s">&#39;000000000000001&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>&#8216;entry&#8217; now contains a pythonic dictionary with the fieldids as keys, and
+the values as value: {field1: &#8216;string&#8217;, field2: 236, ...}. In our example,
+we would like to print out all fields:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">fieldid</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="k">print</span> <span class="s">&#39;</span><span class="si">%d</span><span class="s">: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fieldid</span><span class="p">,</span> <span class="n">entry</span><span class="p">[</span><span class="n">fieldid</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Or if you would like to limit the output to the character fields:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">fieldid</span> <span class="ow">in</span> <span class="n">entry</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">entry</span><span class="p">[</span><span class="n">fieldid</span><span class="p">],</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">print</span> <span class="s">&#39;</span><span class="si">%d</span><span class="s">: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fieldid</span><span class="p">,</span> <span class="n">entry</span><span class="p">[</span><span class="n">fieldid</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="modifying-an-entry">
+<h2>Modifying an entry</h2>
+<p>Now let&#8217;s modify this entry (reusing the entryId from the example above)
+by changing the contents of the field
+Full Name (that&#8217;s the name of field 8 on the form User, typically):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">newFieldValue</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">8</span> <span class="p">:</span> <span class="s">&#39;new user name&#39;</span><span class="p">,</span> <span class="mi">103</span> <span class="p">:</span> <span class="s">&#39;new_email@domain.com&#39;</span><span class="p">}</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">SetEntry</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="n">entryId</span><span class="p">,</span> <span class="n">newFieldValue</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">ars</span><span class="o">.</span><span class="n">errnr</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;ERROR modifying entry!&#39;</span>
+</pre></div>
+</div>
+<p>Of course, the dictionary newFieldValue can take on more than just one
+field with a new value!</p>
+<p>If you compare those two examples with the <a class="reference external" href="tutorial-ar.html">C level examples</a>, you will see that using the more pythonic
+functions reduced the amount of glue code dramatically and makes for
+a much better readable and maintainable code.</p>
+</div>
+<div class="section" id="creating-entries">
+<h2>Creating entries</h2>
+<p>Before you can retrieve or modify entries, you will have to create them.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fieldValue</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">101</span> <span class="p">:</span> <span class="s">&#39;testuser&#39;</span><span class="p">,</span>
+    <span class="mi">8</span> <span class="p">:</span> <span class="s">&#39;New User&#39;</span><span class="p">,</span>
+    <span class="mi">103</span><span class="p">:</span> <span class="s">&#39;my@email.com&#39;</span><span class="p">,</span>
+    <span class="mi">7</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="c"># status: Active</span>
+    <span class="mi">109</span> <span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="c"># floating license</span>
+    <span class="mi">110</span> <span class="p">:</span> <span class="mi">0</span> <span class="c"># no fts license</span>
+<span class="p">}</span>
+<span class="n">entryId</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">CreateEntry</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="n">fieldValue</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">ars</span><span class="o">.</span><span class="n">errnr</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;ERROR modifying entry!&#39;</span>
+</pre></div>
+</div>
+<p>If this did not work out, see below the section for error handling &#8211; maybe
+your user form is customized and requires some additional fields?</p>
+</div>
+<div class="section" id="delete-an-entry">
+<h2>Delete an entry</h2>
+<p>Then, finally, if you want to delete an entry:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">result</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">DeleteEntry</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="n">entryId</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="working-with-field-names-instead-of-field-ids">
+<h2>Working with field names instead of field ids</h2>
+<p>As you can see in the example above, the code is not utterly readable.
+As python is very much about readability, this needs to be changed. There is
+this useful function called GetFieldTable (the idea is taken over from ARSPerl),
+that gets you another dictionary of fieldnames : fieldids:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">userFields</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">GetFieldTable</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If you look at the resulting dictionary userFields, you will see something
+like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">userFields</span>
+<span class="go">{&#39;Application License&#39;: 122L, &#39;Force Password Change On Login&#39;: 124L,</span>
+<span class="go">&#39;Status&#39;: 7L, &#39;Computed Grp List&#39;: 119L...}</span>
+</pre></div>
+</div>
+<p>With this information, we can rewrite the last example to:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">userFields</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">GetFieldTable</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">)</span>
+<span class="n">fieldValue</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">userFields</span><span class="p">[</span><span class="s">&#39;Login Name&#39;</span><span class="p">]</span>       <span class="p">:</span> <span class="s">&#39;testuser&#39;</span><span class="p">,</span>
+    <span class="n">userFields</span><span class="p">[</span><span class="s">&#39;Full Name&#39;</span><span class="p">]</span>        <span class="p">:</span> <span class="s">&#39;New User&#39;</span><span class="p">,</span>
+    <span class="n">userFields</span><span class="p">[</span><span class="s">&#39;Email Address&#39;</span><span class="p">]</span>    <span class="p">:</span> <span class="s">&#39;my@email.com&#39;</span><span class="p">,</span>
+    <span class="n">userFields</span><span class="p">[</span><span class="s">&#39;Status&#39;</span><span class="p">]</span>           <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>          <span class="c"># status: Active</span>
+    <span class="n">userFields</span><span class="p">[</span><span class="s">&#39;License Type&#39;</span><span class="p">]</span>     <span class="p">:</span> <span class="mi">2</span><span class="p">,</span>          <span class="c"># floating license</span>
+    <span class="n">userFields</span><span class="p">[</span><span class="s">&#39;Full Text License Type&#39;</span><span class="p">]</span> <span class="p">:</span> <span class="mi">0</span>     <span class="c"># no fts license</span>
+<span class="p">}</span>
+<span class="n">entryId</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">CreateEntry</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="n">fieldValue</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">ars</span><span class="o">.</span><span class="n">errnr</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;ERROR modifying entry!&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retrieve-a-list-of-entries">
+<h2>Retrieve a list of entries</h2>
+<p>If you don&#8217;t have the entry ids, you can search for entries (GetListEntry) or
+even get the data for the entries returned immediately (GetListEntryWithFields).
+Let&#8217;s concentrate on the second and retrieve the values for the fieldids 1, 5
+and 8 for all entries in the form &#8216;User&#8217;:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># the following is the list of fields we will retrieve for every result entry</span>
+<span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+<span class="p">(</span><span class="n">entries</span><span class="p">,</span> <span class="n">numMatches</span><span class="p">)</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">GetListEntryWithFields</span><span class="p">(</span><span class="n">form</span><span class="p">,</span>
+                                                   <span class="bp">None</span><span class="p">,</span>
+                                                   <span class="n">fields</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>entries now contains a tuple, consisting of a dictionary and
+and integer showing the number of found entries that match the query on the form.
+On my server, entering &#8220;entries&#8221; and hitting return prints out the complete
+dictionary with 500 entries, therefore let&#8217;s first:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">numMatches</span>
+<span class="go">500L</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entries</span><span class="p">[</span><span class="s">&#39;000000000000002&#39;</span><span class="p">]</span>
+<span class="go">{8L: &#39;Axel Seibert&#39;, 1L: &#39;000000000000002&#39;, 5L: &#39;Demo&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entries</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[&#39;000000000020462&#39;, &#39;000000000023613&#39;, &#39;000000000020393&#39;, &#39;000000000020099&#39;, &#39;000000000020392&#39;, ...]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">entries</span><span class="p">[</span><span class="s">&#39;000000000000003&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[8L, 1L, 5L]</span>
+</pre></div>
+</div>
+<p>This was interactive, but of course, it&#8217;s very easy to go through all
+the elements:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;&#39;&#39;User: </span><span class="si">%s</span><span class="s"> with entryId: </span><span class="si">%s</span><span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">entries</span><span class="p">[</span><span class="n">entry</span><span class="p">][</span><span class="mi">8</span><span class="p">],</span>
+                                             <span class="n">entries</span><span class="p">[</span><span class="n">entry</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Now, let&#8217;s change this to use the fieldnames instead of the fieldids:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;&#39;&#39;User: </span><span class="si">%s</span><span class="s"> with entryId: </span><span class="si">%s</span><span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">entries</span><span class="p">[</span><span class="n">entry</span><span class="p">][</span><span class="n">userFields</span><span class="p">[</span><span class="s">&#39;Full Name&#39;</span><span class="p">]],</span>
+                                             <span class="n">entries</span><span class="p">[</span><span class="n">entry</span><span class="p">][</span><span class="n">userFields</span><span class="p">[</span><span class="s">&#39;Request ID&#39;</span><span class="p">]])</span>
+</pre></div>
+</div>
+<p>And again, we don&#8217;t need to remember to free the memory, as erARS has already
+done so.</p>
+<p>Please note: This example leaves the error handling as an exercise to the reader;
+typically,
+you should test ars.errnr after each API call for values greater than 1 (errors)
+and possibly 1 (warning). Only the error number 0 signals a successful call.</p>
+</div>
+<div class="section" id="retrieving-a-certain-subset-of-entries">
+<h2>Retrieving a certain subset of entries</h2>
+<p>When we used GetListEntry in the last example, the second parameter was
+set to None. This is a query that you can pass on to limit the results:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">entries</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">GetListEntryWithFields</span><span class="p">(</span><span class="n">form</span><span class="p">,</span>
+                    <span class="s">&quot;&#39;Email Address&#39; LIKE </span><span class="se">\&quot;</span><span class="s">%@google.com</span><span class="se">\&quot;</span><span class="s">&quot;</span><span class="p">,</span>
+                    <span class="n">fields</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The syntax is the same as in the extended search bar (in other words, field names
+need to be encapsulated with single quotation marks), just make sure to escape
+the quotation marks within the string correctly.</p>
+</div>
+<div class="section" id="retrieving-an-attachment-into-a-buffer">
+<h2>Retrieving an attachment into a buffer</h2>
+<p>This is also quite easy, but might be an exercise for the
+future to also offer a more pythonic version for the ARLocStruct...</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># prepare a structure for the attachment, specify option BUFFER</span>
+<span class="n">loc</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARLocStruct</span><span class="p">(</span><span class="n">cars</span><span class="o">.</span><span class="n">AR_LOC_BUFFER</span><span class="p">)</span>
+<span class="n">att</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">GetEntryBLOB</span> <span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="s">&#39;yourentryid&#39;</span><span class="p">,</span> <span class="mi">600010600</span><span class="p">,</span> <span class="n">loc</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">att</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">buf</span><span class="o">.</span><span class="n">bufSize</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="c"># assuming a plain text file</span>
+    <span class="k">print</span> <span class="n">string_at</span><span class="p">(</span><span class="n">att</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">buf</span><span class="o">.</span><span class="n">buffer</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retrieving-an-attachment-as-a-file">
+<h2>Retrieving an attachment as a file</h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># prepare a structure for the attachment, specify option BUFFER</span>
+<span class="n">loc</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARLocStruct</span><span class="p">(</span><span class="n">cars</span><span class="o">.</span><span class="n">AR_LOC_FILENAME</span><span class="p">)</span>
+<span class="n">loc</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="s">r&#39;c:\temp\attachment.txt&#39;</span>
+<span class="n">att</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">GetEntryBLOB</span> <span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="s">&#39;yourentryid&#39;</span><span class="p">,</span> <span class="n">fieldid</span><span class="p">,</span> <span class="n">loc</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And the file is created in the filesystem automatically for you. You wonder,
+what the &#8216;r&#8217; is in front of the file name? It&#8217;s the python convention for
+raw strings, in other words, python will ignore the &#8216;&#8217;, as it normally
+indicates the beginning of a special character.</p>
+</div>
+<div class="section" id="uploading-an-attachment-as-a-file">
+<h2>Uploading an attachment as a file</h2>
+<p>Starting with release 1.2.5 of pyars, uploading an attachment is
+especially easy, when you have it as
+a file (other usecases are currently not supported by erars).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># prepare a structure for the attachment, specify option BUFFER</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">SetEntry</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="s">&#39;yourentryid&#39;</span><span class="p">,</span>
+<span class="p">{</span><span class="n">fieldId</span><span class="p">:</span> <span class="p">(</span><span class="n">fileName</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fileName</span><span class="p">)})</span>
+</pre></div>
+</div>
+<p>erars will recognize when you hand over a 4-tuple as a special use case
+and assume that you define an attachment with (attachmentName, origSize,
+compressedSize, fileName). Then, the file is uploaded from the filesystem
+automatically for you.</p>
+</div>
+<div class="section" id="get-a-list-of-schemas-from-an-arsystem">
+<h2>Get a list of schemas from an ARSystem</h2>
+<p>In this part we will retrieve the list of schemas from the ARSystem:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">listSchema</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">GetListSchema</span><span class="p">()</span>   <span class="c"># fetch a list of all schema names</span>
+<span class="k">if</span> <span class="n">ars</span><span class="o">.</span><span class="n">errnr</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">listSchema</span><span class="p">)):</span>
+        <span class="k">print</span> <span class="n">listSchema</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">GetSchema</span><span class="p">(</span><span class="n">listSchema</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="c"># now fetch the detail information for this schema</span>
+        <span class="c"># schema is one of the convenience structures...</span>
+        <span class="c"># print out the help text for this schema:</span>
+        <span class="k">print</span> <span class="n">schema</span><span class="o">.</span><span class="n">helpText</span>
+        <span class="n">ars</span><span class="o">.</span><span class="n">ARFree</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span> <span class="c"># free the memory</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;error retrieving list of schemas!&quot;</span>
+</pre></div>
+</div>
+<p>As there is no nice structure defined by Remedy/BMC that
+would hold all relevant schema information (as retrieved by ARGetSchema) we
+came up with our own structure:</p>
+<div class="highlight-python"><div class="highlight"><pre>class ARSchema(Structure):
+_fields_ =  [(&quot;name&quot;, cars.ARNameType),
+             (&quot;schema&quot;, cars.ARCompoundSchema),
+             (&quot;schemaInheritanceList&quot;, cars.ARSchemaInheritanceList),
+             (&quot;groupList&quot;, cars.ARPermissionList),
+             (&quot;admingrpList&quot;, cars.ARInternalIdList),
+             (&quot;getListFields&quot;,  cars.AREntryListFieldList),
+             (&quot;sortList&quot;, cars.ARSortList),
+             (&quot;indexList&quot;, cars.ARIndexList),
+             (&quot;archiveInfo&quot;, cars.ARArchiveInfoStruct),
+             (&quot;defaultVui&quot;, cars.ARNameType),
+             (&quot;helpText&quot;, c_char_p),
+             (&quot;timestamp&quot;, cars.ARTimestamp),
+             (&quot;owner&quot;, cars.ARAccessNameType),
+             (&quot;lastChanged&quot;, cars.ARAccessNameType),
+             (&quot;changeDiary&quot;, c_char_p),
+             (&quot;objPropList&quot;, cars.ARPropList)]
+</pre></div>
+</div>
+<p>So, in a sense, those additional structures allow us to be a litte bit more
+pythonic than with the usual data structures.</p>
+<p>Please note: looking back at this, with erARS in the wild, this
+now seems like a bad decision to implement those helper data structures
+already in pyars.ars. They really should have gone into pyars.erars. Maybe
+I will correct this in a later release, as it will break backwards
+compatibility</p>
+<p>To demonstrate how you can use the lookup dictionary
+(assuming, you set up
+a connection with your ARS):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyars</span> <span class="kn">import</span> <span class="n">cars</span>
+<span class="n">field</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">GetField</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;field </span><span class="si">%s</span><span class="s">(</span><span class="si">%d</span><span class="s">) of type </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">fieldName</span><span class="p">,</span>
+                  <span class="n">field</span><span class="o">.</span><span class="n">fieldId</span><span class="p">,</span>
+                  <span class="n">cars</span><span class="o">.</span><span class="n">ars_const</span><span class="p">[</span><span class="s">&#39;AR_DATA_TYPE&#39;</span><span class="p">][</span><span class="n">field</span><span class="o">.</span><span class="n">dataType</span><span class="p">])</span>
+<span class="n">ars</span><span class="o">.</span><span class="n">ARFree</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the file cars.py you will find the definition of this dictionary. So if
+you want to print out something, go in there and search for the constant.</p>
+<p>At the end of your session, it&#8217;s always a good idea to logoff:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ars</span><span class="o">.</span><span class="n">Logoff</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Python makes it easy to log off from the system in any case:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">try</span><span class="p">:</span>
+    <span class="o">...</span> <span class="c"># some code</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">ars</span><span class="o">.</span><span class="n">Logoff</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="error-handling">
+<h2>Error handling</h2>
+<p>If something goes wrong in one of the examples above, you typically
+see the following output in your console:</p>
+<div class="highlight-python"><div class="highlight"><pre>2009-08-18 18:35:06,187 pyars.ars DEBUG enter ARCreateEntry...
+2009-08-18 18:35:06,375 pyars.ars ERROR ARCreateEntry for schema User failed
+</pre></div>
+</div>
+<p>To make sure you catch errors in the API calls, you can check the ars.errnr
+after each api call:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">if</span> <span class="n">ars</span><span class="o">.</span><span class="n">errnr</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="n">ars</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s">&#39;something went wrong with this api call!&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Maybe you did not fill in all required fields? The Remedy server offers
+the status message, that most often explains why an API call did
+not work. In order to give you easier access to the status messages, I created a
+function called statusText() that will return the strings of the message:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ars</span><span class="o">.</span><span class="n">statusText</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>For example, this will print out the following error:</p>
+<div class="highlight-python"><div class="highlight"><pre>&#39;Status:
+ERROR (307): Required field (without a default) not specified
+600010025
+ERROR (307): Required field (....&#39;
+</pre></div>
+</div>
+<p>Maybe you do not see the line break but just a concatenated single liner...</p>
+</div>
+<div class="section" id="a-more-detailed-look-at-retrieving-an-entry">
+<h2>A more detailed look at retrieving an entry</h2>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyars</span> <span class="kn">import</span> <span class="n">erars</span>
+</pre></div>
+</div>
+<p>If you run into problems at this line, pyars cannot find the Remedy libraries to
+connect to your Remedy server. On windows, that means, that you don&#8217;t have a
+user tool or admin tool installed or strange entries in the registry.
+Make sure that the path to your libraries is contained in the system path.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ars</span> <span class="o">=</span> <span class="n">erars</span><span class="o">.</span><span class="n">erARS</span><span class="p">()</span> <span class="c"># instantiate a session object</span>
+<span class="n">connection</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">Login</span><span class="p">(</span><span class="s">&#39;server&#39;</span><span class="p">,</span> <span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">)</span> <span class="c"># store the connection</span>
+</pre></div>
+</div>
+<p>There are different API calls to retrieve
+form entries from an ARsystem, let&#8217;s start with ARGetEntry, and let&#8217;s fetch
+the &#8216;User&#8217; entry with entryid 1:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">form</span> <span class="o">=</span> <span class="s">&#39;User&#39;</span> <span class="c"># this is the form</span>
+<span class="n">entryid</span> <span class="o">=</span> <span class="mi">1</span> <span class="c"># this is the entryid that we would like to retrieve</span>
+<span class="n">entry</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">GetEntry</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">entryid</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Here you can see the difference to the low level C data structures (compare
+that with the <a class="reference external" href="tutorial-ar.html">C level function call</a>!).
+And you do not need to worry about the request-id: erARS will try to convert
+it for you, so in this case, even the integer 1 is enough. This of course
+is not always the case, but you could as well call with a string:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">entry</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">GetEntry</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="s">&#39;1&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>or with the correct request-id:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">entry</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">GetEntry</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="s">&#39;000000000000001&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, that we have received something from the server, let&#8217;s have a look
+at that piece of data: When you enter:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">entry</span>
+</pre></div>
+</div>
+<p>you will see something along the following lines:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="p">{</span><span class="il">128L</span><span class="p">:</span> <span class="bp">None</span><span class="p">,</span> <span class="il">1L</span><span class="p">:</span> <span class="s">&#39;000000000000001&#39;</span><span class="p">,</span> <span class="il">2L</span><span class="p">:</span> <span class="s">&#39;Demo1&#39;</span><span class="p">,</span> <span class="il">3L</span><span class="p">:</span> <span class="mi">1172650162</span><span class="p">,</span>
+<span class="go">4L: None, 5L: &#39;....}</span>
+</pre></div>
+</div>
+<p>So, erARS has converted the C level data structures into a pythonic
+dictionary where you can use the keys() functions to get all
+fieldids and then use those to retrieve the values for each fieldid
+extremely fast. Or you can use the len() function to find out
+how many values you have been returned:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="nb">len</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now the old tutorial guides you through some helper functions that
+erARS already brings to the table, so we can skip all this and
+directly use the Python dictionary:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>And finally, we don&#8217;t need to free the memory any more, as erARS has
+taken care of this.</p>
+</div>
+<div class="section" id="migrating-from-arsperl">
+<h2>migrating from ARSPerl</h2>
+<p>The following functions are defined in ARSPerl, and have been
+implemented in pyARS as well to ease migration:</p>
+<ul class="simple">
+<li>GetFieldByName: is available as erars.GetFieldByName()</li>
+<li>GetFieldTable: is available as erars.GetFieldTable()</li>
+<li>APIVersion(): This routine is available as erars.APIVersion() and
+returns the &#8220;major&#8221; version of the API that
+pyARS has found on your system and that it will use. As pyARS is not compiled
+against a specific API version, it&#8217;s impossible to implement exactly
+the same behaviour.</li>
+<li>decodeStatusHistory: is available as erars.DecodeStatusHistory()</li>
+<li>EncodeDiary: is available as erars.EncodeDiary()</li>
+<li>GetControlStructFields: is available as ars.ARGetControlStructFields() or
+erars.GetControlStructFields() (without any differences)</li>
+<li>GetCurrentServer: is available as ars.ARGetCurrentServer() or
+erars.GetCurrentServer() (without any differences)</li>
+<li>GetProfileInfo: seems to be similar to erars.GetServerStatistics().
+If you know of any differences, please let me know.</li>
+<li>padEntryid: is available as ars.padEntryid()</li>
+<li>errstr: is available as erars.errstr()</li>
+<li>perl_qualifier: currently not supported; if you need this, let
+me know your use case, and either we find a workaround or we will try to
+implement this</li>
+<li>simpleMenu: currently not supported</li>
+</ul>
+</div>
+<div class="section" id="how-to-proceed">
+<h2>How to proceed</h2>
+<p>Generally speaking, you need to follow those steps:</p>
+<ul class="simple">
+<li>Identify which API function you want to call</li>
+<li>Identify which data structures this API call expects</li>
+<li>Prepare those data structures</li>
+<li>Call the API function</li>
+<li>Identify which data structures this API call returns; have a look at the
+examples in ars_test.py and cmdb_test.py, respectively. You will
+find many helpful code snippets in there.</li>
+<li>Have a look at the unit tests (ars_test.py and cmdb_test.py) which
+provide many useful examples.</li>
+<li>Give us feedback, possibly submit code, patches.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2004-2015, Axel Seibert.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b3.
+    </div>
+  </body>
+</html>

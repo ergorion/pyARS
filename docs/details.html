@@ -1,0 +1,355 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>details of the pyARS implementation &mdash; pyARS 1.8.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.8.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyARS 1.8.2 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/ergorion_logo_klein.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">details of the pyARS implementation</a><ul>
+<li><a class="reference internal" href="#the-layers">the layers</a><ul>
+<li><a class="reference internal" href="#arsystem-c-api">ARSystem C API</a></li>
+<li><a class="reference internal" href="#structures-and-definitions">structures and definitions</a></li>
+<li><a class="reference internal" href="#structure-conversion-and-usage">structure conversion and usage</a></li>
+<li><a class="reference internal" href="#file-structure">file structure</a></li>
+<li><a class="reference internal" href="#ars-py-and-cmdb-py">ars.py and cmdb.py</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#convenience-structures">convenience structures</a></li>
+<li><a class="reference internal" href="#unit-tests">unit tests</a></li>
+</ul>
+</li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/details.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p>pyARS - from python to ARS</p>
+<div class="section" id="details-of-the-pyars-implementation">
+<h1>details of the pyARS implementation</h1>
+<p>Unless you want to get involved with the development and bug fixing for
+pyARS, I guess, there is no need to read behind this point...</p>
+<div class="section" id="the-layers">
+<h2>the layers</h2>
+<p>There are five layers (from bottom to top):</p>
+<ul class="simple">
+<li>ARS C API, accessed via Python and ctypes (a python module)</li>
+<li>_carsxx module (wrapper for all C struct declarations, depending on the
+Remedy version)</li>
+<li>cars and ccmdb module (loading the appropriate version of _carsxx, version
+independent)</li>
+<li>ars and cmdb module (exposing the low level API functions of ARSystem
+and Atrium,   repectively, using the C structures)</li>
+<li>erars and ercmdb module (exposing a more pythonic API, using
+Python data structures and offering conversion methods)</li>
+</ul>
+<div class="section" id="arsystem-c-api">
+<h3>ARSystem C API</h3>
+<p>The ARSystem C API is the library as provided by Remedy (now, BMC) -
+the .dll or .so
+library accessed via the Python module &#8220;ctypes&#8221;. The ctypes module allows the
+Python interpreter to
+load the DLLs and call the functions in the DLLS.</p>
+</div>
+<div class="section" id="structures-and-definitions">
+<h3>structures and definitions</h3>
+<p>_carsxx.py (&#8220;Constants for ARS&#8221; for different versions) and _ccmdbapixx.py/
+_carosapi63.py (&#8220;Constants for CMDB&#8221;) contains all #defines and
+data structures defined for ARSystem. These files are automatically generated
+from .h files as supplied by BMC and depend on the version &#8211; therefore you
+will find e.g. _cars63.py as well as _cars71.py.</p>
+<p>cars.py tries to load the ARSystem DLL; depending on the version it finds, it
+will load the appropriate _carsxx.py module
+(the following explanation also holds true for the CMDB code, therefore I will
+not always say: ars and cmdb): It has a built in list of DLLs
+corresponding to the different versions of the ARS API (e.g. 7.1 vs. 6.3 vs.
+5.1), that it will try to load (beginning with the highest version).
+Depending on which ARS DLL it could load,
+it will load the appropriate _cars51.py, _cars60.py, _cars63.py,... file.
+In other words,
+with this mechanism, the client API version determines, which protocol version
+the pyars package talks to the server.</p>
+<p>cars.py uses the system path to locate the ARSystem dlls. Unfortunately,
+Remedy does not update the system path to include the directory where it
+stores its dlls. Therefore, on windows, cars looks up the windows registry
+for the installation path of aruser and will append this directory to
+the systempath. So the version of the installed user tool will determine the API
+version cars.py will offer you.</p>
+<p>If you want to use another dll, simply copy the according dll files into
+a separate directory, put this directory at the beginning of your system path
+and start python with those new settings. cars should then find the dlls in
+this directory before any other directory and use this version.</p>
+<p>You should never need to import any file with a name
+beginning with the underscore &#8220;_&#8221; (e.g. _cars70.py). If you need to
+access the structures defined in those files, you do:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyars</span> <span class="kn">import</span> <span class="n">cars</span>
+</pre></div>
+</div>
+<p>which will fetch the right version of _carsxx.py based on the library that it
+finds first in your system path.</p>
+</div>
+<div class="section" id="structure-conversion-and-usage">
+<h3>structure conversion and usage</h3>
+<p>The Remedy data structures have been completely ported to python. Originally,
+this used to be a highly manual process resulting in nicely formatted and
+highly readable python code, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre>class ARFieldInfoStruct(Structure):
+_fields_ = \[(&quot;fieldId&quot;, ARInternalId),
+(&quot;fieldName&quot;, ARNameType),
+(&quot;timestamp&quot;, ARTimestamp),
+(&quot;fieldMap&quot;, ARFieldMappingStruct),
+(&quot;dataType&quot;, c_uint),
+(&quot;option&quot;, c_uint),
+(&quot;createMode&quot;, c_uint),
+(&quot;defaultVal&quot;, ARValueStruct),
+(&quot;permList&quot;, ARPermissionList),
+(&quot;limit&quot;, ARFieldLimitStruct),
+(&quot;dInstanceList&quot;, ARDisplayInstanceList),
+(&quot;owner&quot;, ARAccessNameType),
+(&quot;lastChanged&quot;, ARAccessNameType),
+(&quot;helpText&quot;, c_char_p),
+(&quot;changeDiary&quot;, c_char_p)]
+</pre></div>
+</div>
+<p>The list defines all member variables with their names and types.
+So, if you have a variable that contains this ARFieldInfoStruct, you can
+easily access all members of that struct in the usual way:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">variable</span><span class="o">.</span><span class="n">fieldId</span>
+</pre></div>
+</div>
+<p>Or, in more complex scenarios, it allows you to follow the deeply nested
+Remedy structures.</p>
+<p>Very often, you will find the following combination of structs and according
+lists:</p>
+<div class="highlight-python"><div class="highlight"><pre>class ARPermissionStruct(Structure):
+_fields_ = \[(&quot;groupId&quot;, ARInternalId),
+(&quot;permissions&quot;, c_uint)]
+class ARPermissionList(Structure):
+_fields_ = \[(&quot;numItems&quot;, c_uint),
+(&quot;permissionList&quot;, POINTER(ARPermissionStruct))]
+class ARPermissionListList(Structure):
+_fields_ = \[(&quot;numItems&quot;, c_uint),
+(&quot;permissionList&quot;, POINTER(ARPermissionList))]
+</pre></div>
+</div>
+<p>It is very easy to iterate over such a list (see also example above):</p>
+<div class="highlight-python"><div class="highlight"><pre>for i in range(arpermissionList.numItems):
+print &#39;line #%d: groupId: %d has permissions: %d&#39; % (
+i,
+arpermissionList.permissionList[i].groupId,
+arpermissionList.permissionList[i].permissions)
+</pre></div>
+</div>
+</div>
+<div class="section" id="file-structure">
+<h3>file structure</h3>
+<p>Here is a list of files and what they do:</p>
+<ul class="simple">
+<li>directory docs: contains documentation about the pyars module.</li>
+<li>_carosapi63.py: contains the structures and definitions for accessing
+the Atrium CMDB in version 1.0 and 1.1 patch 001</li>
+<li>_cars51.py, _cars60.py, etc.: contains the structures and definitions for accessing
+any Remedy server version 5.1 and higher</li>
+<li>_ccmdbapi20.py: contains the structures and definitions for accessing
+the Atrium CMDB in 2.0 and higher</li>
+<li>_ccmdbapi63.py: contains the structures and definitions for accessing
+the Atrium CMDB in version 1.1 patch 002</li>
+<li>ars_test.py: contains unit tests of the pyars.ars module</li>
+<li>cars.py: This file is imported by ars and loads the ARSystem library.
+Depending on the library version that it finds, it then loads the according
+_carsxx file that contains the coresponding structure definitions.</li>
+<li>ars.py: the main working horse for the pyars module: it contains
+low level wrappers for all functions (AR...) that the ARSystem API provides.</li>
+<li>erars.py: building on top of the low level API functions, this
+module exposes the higher, more pythonic versions of the functions. Each
+low level function (e.g. ARGetSchema) has a higher level equivalent
+without the prefix AR (e.g. GetSchema).</li>
+<li>ccmdb.py: This file is imported by cmdb and loads the Atrium CMDB library.
+Depending on the library version that it finds, it then loads the according
+_carosapixx or _ccmdbapixx file that contains the coresponding structure
+definitions.</li>
+<li>cmdb_test.py: contains unit tests of the pyars.cmdb module
+definitions.</li>
+<li>cmdb.py: it contains
+wrappers for all functions that the Atrium CMDB API provides.</li>
+</ul>
+</div>
+<div class="section" id="ars-py-and-cmdb-py">
+<h3>ars.py and cmdb.py</h3>
+<p>The pyars module is mainly split into two parts: ars.py for
+all ARSystem API calls and cmdb.py for all Atrium CMDB calls (the other files
+are support files).</p>
+<p>ars.py defines a base class that holds all function definitions for
+ARS V5.1.2. It then defines
+a subclass ARS60 (and ARS63 and ...) that inherits everything from the class before and
+implements the difference between 5.1 and 6.0
+(between 6.0 and 6.3, respectively).
+A third class definition finally (ARS) maps to one of the two classes (pyars
+relies on the version information in cars, see above).</p>
+<p>The same holds true for cmdb.py, although it&#8217;s a bit more complicated: Let&#8217;s start
+with CMDB Version 1.1 patch 002 and later: cmdb.py defines a base class that holds all
+function definitions for V1.1, CMDB11. It then defines
+a subclass CMDB20 that inherits everything from the class before and
+implements the difference between 1.1 and 2.0.
+A third class definition finally (CMDB) maps to one of the two classes (cmdb
+relies on the version information in ccmdb, see above). The reason, why it&#8217;s a
+bit more complicated is, because BMC changed the naming convention mid stream.
+In Version 1.0 and 1.1 before patch 002, all Atrium API function names started
+with AROS instead of CMDB. In cmdb.py you will find a class AROS10. To make your
+life easier, we provide another wrapper around that which provides a CMDB10 class
+with a coresponding CMDB naming convention for all functions (in other words, your
+scripts don&#8217;t have to worry if they work against a CMDB 1.0 or CMDB 2.0, because
+the CMDB wrapper allows you to use CMDB functions regardless of the CMDB version).</p>
+<p>ars.py is the main building block which exposes
+the interface to ARS via a class called ARS that will handle all the session
+handling for you (see tutorial). In addition, it defines a couple of
+comfort structures, that the API does not define (e.g. ARMenuStruct or
+ARFilterStruct), that do nothing but collect all relevant information in one
+structure (especially useful as return values in the GetMultiple... calls).</p>
+</div>
+</div>
+<div class="section" id="convenience-structures">
+<h2>convenience structures</h2>
+<p>In addition to the original Remedy data structures, I have defined some
+useful helper structures:</p>
+<ul class="simple">
+<li>ARActiveLinkStruct</li>
+<li>ARActiveLinkList</li>
+<li>ARContainerStruct</li>
+<li>AREscalationStruct</li>
+<li>ARFilterStruct</li>
+<li>ARFilterList</li>
+<li>ARMenuStruct</li>
+<li>ARSchema</li>
+<li>ARSchemaList</li>
+</ul>
+<p>As those helper structures proofed rather helpful, I also introduced similar
+classes for CMDB:</p>
+<ul class="simple">
+<li>CMDBAttributeStruct</li>
+<li>CMDBAttributeList</li>
+<li>CMDBClassStruct</li>
+<li>CMDBClassList</li>
+</ul>
+</div>
+<div class="section" id="unit-tests">
+<h2>unit tests</h2>
+<p>We supply unit tests for pyars.ars, pyars.erars and pyars.cmdb. You can
+run those test suites against your ARSystem or CMDB, by issuing:</p>
+<div class="highlight-python"><div class="highlight"><pre>ars_test.py -x &lt;server&gt; -u &lt;user&gt; -p &lt;password&gt;
+</pre></div>
+</div>
+<p>or:</p>
+<div class="highlight-python"><div class="highlight"><pre>cmdb_test.py -x &lt;server&gt; -u &lt;user&gt; -p &lt;password&gt;
+</pre></div>
+</div>
+<p>where server can be given as servername:portname. All you should see is for ars_test.py:</p>
+<div class="highlight-python"><div class="highlight"><pre>D:\\privat\\Ergo\\code\\pyars\\pyars&gt;python ars_test.py -x &lt;server&gt;[:port] -u &lt;user&gt; -p &lt;password&gt;
+..................................................................................
+----------------------------------------------------------------------
+Ran 82 tests in 4.292s
+</pre></div>
+</div>
+<p>For cmdb_test.py it should look similar. And with the option -v you get verbose
+(debugging) output.</p>
+<p>If you mix the versions of client libraries and server, you might crash
+the server. Therefore, we implemented a test to make sure that both versions
+match at the beginning of those tests. However, if you know what you are
+doing you can override this behaviour with the -f (force) option.</p>
+<p>The User tool
+typically does not install the xml libraries alongside the arapi.dll.
+Therefore we moved the xml tests into its own test file: arxml_test.py.
+If you run into problems with the XML api calls, please check that you have the
+necessary libraries in your PATH. The arxml_test.py gives you
+according hints.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2004-2015, Axel Seibert.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b3.
+    </div>
+  </body>
+</html>

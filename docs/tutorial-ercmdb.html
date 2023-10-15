@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyARS - from python to ARS &mdash; pyARS 1.8.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.8.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyARS 1.8.2 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/ergorion_logo_klein.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyARS - from python to ARS</a><ul>
+<li><a class="reference internal" href="#tutorial-for-usage-of-pyars-ercmdb">Tutorial for usage of pyars.ercmdb</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pyars-ercmdb-introduction">pyars.erCMDB: introduction</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/tutorial-ercmdb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyars-from-python-to-ars">
+<h1>pyARS - from python to ARS</h1>
+<div class="section" id="tutorial-for-usage-of-pyars-ercmdb">
+<h2>Tutorial for usage of pyars.ercmdb</h2>
+</div>
+</div>
+<div class="section" id="pyars-ercmdb-introduction">
+<h1>pyars.erCMDB: introduction</h1>
+<p>Currently the pythonic layer erCMDB does not offer much functionality.
+Yet.</p>
+<p>With GetClass you can get the definition of a class, handing over only the name
+of the class; ercmdb.GetClass will handle the rest for you:</p>
+<div class="highlight-python"><div class="highlight"><pre>from pyars import ercmdb
+ars = ercmdb.erCMDB()
+ars.Login(&#39;server:port&#39;, &#39;user&#39;, &#39;password&#39;)
+className = &#39;%s:%s&#39; % (ccmdb.BMC_namespace, ccmdb.BMC_baseclass)
+class = ars.GetClass(className)
+if ars.errnr &gt; 1:
+# do some error handling
+ars.logger.error(&#39;Could not retrieve class: %s&#39; % className)
+else:
+print &quot;The superclass of class %s:%s is %s:%s&#39; % (
+ccmdb.BMC_namespace,
+ccmdb.BMC_baseclass,
+class.superclassNameId.namespaceName,
+class.superclassNameId.className)
+ars.Logoff()
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2004-2015, Axel Seibert.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b3.
+    </div>
+  </body>
+</html>

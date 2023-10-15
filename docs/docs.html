@@ -1,0 +1,171 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyARS - the swiss knife for the Remedy developer and admin &mdash; pyARS 1.8.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.8.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyARS 1.8.2 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/ergorion_logo_klein.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyARS - the swiss knife for the Remedy developer and admin</a></li>
+<li><a class="reference internal" href="#docs">Docs</a></li>
+<li><a class="reference internal" href="#success-stories">success stories</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/docs.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyars-the-swiss-knife-for-the-remedy-developer-and-admin">
+<h1>pyARS - the swiss knife for the Remedy developer and admin</h1>
+</div>
+<div class="section" id="docs">
+<h1>Docs</h1>
+<p>We release this piece of software under the GNU Public License in the hope
+that it will be useful to some people out there. We use opensource software
+extensively, and would like to contribute back to the community.
+We also invite you to participate in the <a class="reference external" href="https://sourceforge.net/projects/pyars">further development of pyars</a>.</p>
+<ul class="simple">
+<li>We provide different tutorials, one for
+<a class="reference external" href="tutorial.html">the pythonic ARSystem interface</a>,
+one for <a class="reference external" href="tutorial-ar.html">the C level interface</a>,
+one for <a class="reference external" href="tutorial-ercmdb.html">the pythonic CMDB</a> interface,
+and one  <a class="reference external" href="tutorial-cmdb.html">the C level CMDB interface</a>.</li>
+<li>We also have a couple of more <a class="reference external" href="examples.html">code
+examples</a></li>
+<li>We hope to include in the near future many more examples coming from the
+community!</li>
+<li>For a more detailed view, please look at <a class="reference external" href="details.html">the details</a>.</li>
+<li>pydoc has generated documentation of <a class="reference external" href="pyars.erars.html">erARS</a>,
+<a class="reference external" href="pyars.ars.html">ARS</a>,
+<a class="reference external" href="pyars.ercmdb.html">erCMDB</a>
+and <a class="reference external" href="pyars.cmdb.html">CMDB</a>.</li>
+<li>please report bugs, requests and feedback to the
+<a class="reference external" href="https://sourceforge.net/tracker/?group_id=168313">forums at sourceforge</a>.</li>
+<li>If you worry about using a scripting language for general purpose
+development or about slower programs with much higher memory footprint,
+read our <a class="reference external" href="whypython.html">point of view</a> .</li>
+</ul>
+</div>
+<div class="section" id="success-stories">
+<h1>success stories</h1>
+<p>We at Ergorion have used this as a plattform for developing a whole bunch
+of useful applications (scripts to quickly create or modify
+data entries and configuration data, check the health status of your CMDB,
+visualize the contents of your CMDB, analyze the workflow, etc.;
+over <a class="reference external" href="http://www.ergorion.com">at our website</a> you will find more information about Remedy and CMDB
+tools, including info about our complete MVC (model, view, controler) compliant
+library for outputting any Remedy data structure in any format you wish).</p>
+<p>In another project we wanted to synchronize our user data as stored in
+ARSystem with the central LDAP directory. So, we got the python ldap module
+(for windows; update: in the mean time, we have this running under Solaris as well),
+wrote a short script, and had updated employee numbers,
+phone numbers, country information etc. The worst part was getting the
+correct LDAP keys and filters. But then, roughly 3 pages of code
+(mainly validation), and after roughly 30 min run time, we had
+15.000 users updated.</p>
+<p>Load testing: Turns out, that with python&#8217;s &#8220;batteries included&#8221;, it&#8217;s
+extremely easy to load test your remedy server: use this pyars module,
+write a function that in a loop e.g. creates 1000 entries in a form. Then,
+using Python&#8217;s multiprocessing module, create a couple of processes that all
+execute this function. Create those processes with a certain rampup time
+and you have a nice load tester.</p>
+<p>Another project kept track of the login status of their users, using
+a homegrown C program (that was run every 5 min by an escalation).
+This C program was developed when the user community
+had just a couple of hundred members. Years later, they found themselves with
+more than 11.000 users and the issue that the program would take more than
+20 min to run. While re-implementing the tool in python, the source code
+could be reduced from 11 pages of C code to 4 pages of Python code; the
+algorithm was reduced from an exponential complexity to a quadratic
+complexity, reducing the run time (in Python!) to less than 30 secs.</p>
+<p>Of course, we would like to hear from your stories, then we can publish
+them here!</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2004-2015, Axel Seibert.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b3.
+    </div>
+  </body>
+</html>

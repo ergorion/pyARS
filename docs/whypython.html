@@ -1,0 +1,227 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyARS - from python to ARS &mdash; pyARS 1.8.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.8.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyARS 1.8.2 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/ergorion_logo_klein.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyARS - from python to ARS</a><ul>
+<li><a class="reference internal" href="#why-python-is-your-friend">Why Python Is Your Friend</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#do-you-have-concerns-using-a-scripting-language">Do you have concerns using a scripting language?</a></li>
+<li><a class="reference internal" href="#success-story">Success Story</a></li>
+<li><a class="reference internal" href="#speed">Speed</a></li>
+<li><a class="reference internal" href="#other-questions">Other Questions</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/whypython.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyars-from-python-to-ars">
+<h1>pyARS - from python to ARS</h1>
+<div class="section" id="why-python-is-your-friend">
+<h2>Why Python Is Your Friend</h2>
+</div>
+</div>
+<div class="section" id="do-you-have-concerns-using-a-scripting-language">
+<h1>Do you have concerns using a scripting language?</h1>
+<p>Many people, especially those who used to develop C programs to
+talk to a Remedy server, confront us with their fears of slow or memory
+hungry programs. In this document, I&#8217;d like to give you a couple of
+reasons, why there is no need to fear Python :-).</p>
+<p>So let me start by explaining, why we chose Python as preferred
+language. Throughout this document, please bear in mind, that
+we do not think, that one size fits all, or that Python is the hammer for
+every nail out there. Having said that, however, we have not yet found a
+problem in the ARSystem space that could not be solved this this hammer.</p>
+<p>We came to Python from a very different angle, originally: We were
+searching for a document management system, found ` &lt;<a class="reference external" href="http://www.plone.org">http://www.plone.org</a>&gt;`_,
+which runs on ` &lt;<a class="reference external" href="http://www.zope.org">http://www.zope.org</a>&gt;`_ which is built in ` &lt;<a class="reference external" href="http://www.python.org">http://www.python.org</a>&gt;`_. Exploring the python websites some more,
+we found many interesting <a class="reference external" href="http://www.python.org/about/success/">projects</a> and stumbled across many useful libraries and tools.</p>
+<p>But what we found the most interesting things about Python, are the
+following:</p>
+<ul class="simple">
+<li>For us, the most important aspect is, that you can write your
+scripts and applications in an interactive manner; using Python&#8217;s shell, you
+simply call one function (e.g. ARSystem API function), look at the
+result and continue your next step from there. This makes life so much
+easier than the traditional edit, compile, run, debug cycle. This is
+especially true for short scripts that you quickly develop during your
+daily life as a devloper or maintainer. Writing applications, we prefer
+a decent design over trial and error, but still, quickly trying something
+out in a very intuitive manner, is extremely helpful.</li>
+<li>Writing programs in python is extremely productive (and fun, btw).</li>
+<li>As the identation of the program code is part of the semantics, everybody
+needs to adhere to the same style guide. Which results in a highly readable
+code that anybody can read and understand, even months later.</li>
+</ul>
+</div>
+<div class="section" id="success-story">
+<h1>Success Story</h1>
+<p>Let me give you one success story from real life: we had a C program
+monitor the status of the logged in users and update the information in a
+Remedy form every 20 mins. This program had been in use for a couple of years,
+the only complaint was that it would crash when you limited the search result.</p>
+<p>When the company merged with another, user numbers exploded, and all
+of a sudden this C program would take forever to complete: a single run
+would take nearly 43 mins, and still it was run every 20 min.</p>
+<p>The deeper analysis showed, that the runtime of the algorith would
+grow with the square of the number of registered users.</p>
+<p>When we rewrote this program in python, we:</p>
+<ul class="simple">
+<li>could reduce the algorithm very easily to be linear</li>
+<li>could reduce the runtime from 43 mins to 30 secs</li>
+<li>could reduce the code from 15 pages to 3 pages, making it much
+more readable and maintainable</li>
+</ul>
+<p>I hear your questions: could you not have done this in C as well?
+Of course, you could have done it (at least addressing the first two
+bullet points above). But who has this hashing library hanging
+around that just comes naturally with Python? And then still, you would
+have needed all the glue code that makes reading the code so hard.</p>
+</div>
+<div class="section" id="speed">
+<h1>Speed</h1>
+<p>most often, people will ask us if the programs don&#8217;t run
+too slow? There are a couple of ways to answer this.
+- One possible answer goes like this: We are talking about</p>
+<blockquote>
+<div>tools and applications that have something to do with an ARSystem server in the
+background that we want to talk to. Therefore, we have communication
+between our application and the ARSystem server, most often across a network.
+Thus, network latency, network bandwidth, network jitter and the ARSystem
+response time usually play a much bigger role in determining your perceived
+application performance than this little Python script on your computer. On top of that,
+the python interpreter compiles your script into a bytecode on the first run,
+that will be directly executed in following runs.</div></blockquote>
+<ul class="simple">
+<li>The other way to answer this question: Granted, you cannot compare the
+execution speed of python with that
+of C. You give a little bit in terms of execution speed, but you gain
+massively in term of developer productivity. However, if you have learned
+enough about Python, you can develop with speed in mind and use data
+structures and code fragments, that are directly implemented or mapped in C,
+resulting in C similar performance (e.g. list and list comprehension).</li>
+<li>Yet another possible answer is, that speed concerns have been the main driver
+for us to connect python to the C API directly and not go through other
+layers in between.</li>
+<li>Another possible answer is: use the power to develop your software
+quickly in python, optimize it, and if this still is not enough, resolve to
+e.g. C and code your module as an extension that you call from within python.</li>
+<li>However you slice and dice this, there will always be people who
+bring this performance issue as an excuse not to try something new. There
+are enough pages on the web that deal with python and performance, that you
+can consult should you really need it. And always beware of pre-mature
+optimizations!</li>
+</ul>
+</div>
+<div class="section" id="other-questions">
+<h1>Other Questions</h1>
+<p>The following is a list of questions, we hear most often:</p>
+<ul class="simple">
+<li>memory hug: of course, carrying your interpreter with you costs
+memory. But most memory is typically consumed when retrieving the ARSystem data
+structures from the server. So, are you freeing all this memory nicely?</li>
+<li>executables: You do not need to deliver your source code to your
+client. There are <a class="reference external" href="http://www.py2exe.org">tools available</a>,
+that compile and link your code into
+a single executable that runs under Windows.</li>
+<li>web frameworks: There are a couple of first class web frameworks
+out there that can <a class="reference external" href="http://www.python.org/community/sigs/current/web-sig/">help you build your own web application</a>.</li>
+<li>GUI applications: For any of the major GUI toolkits, there are python
+bindings available, e.g. GTK, QT, TK etc.</li>
+</ul>
+<p>So we hope we could clarify why we don&#8217;t see any reason why you should
+be afraid of Python. But see for yourself and take a test ride. Have fun!</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2004-2015, Axel Seibert.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b3.
+    </div>
+  </body>
+</html>

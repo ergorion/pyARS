@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyARS - the swiss knife for the Remedy developer and admin &mdash; pyARS 1.8.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.8.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyARS 1.8.2 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/ergorion_logo_klein.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyARS - the swiss knife for the Remedy developer and admin</a></li>
+<li><a class="reference internal" href="#download">Download</a></li>
+<li><a class="reference internal" href="#known-issues">known issues</a></li>
+<li><a class="reference internal" href="#license-and-support">License and Support</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/download.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyars-the-swiss-knife-for-the-remedy-developer-and-admin">
+<h1>pyARS - the swiss knife for the Remedy developer and admin</h1>
+</div>
+<div class="section" id="download">
+<h1>Download</h1>
+<p>We release this piece of software under the GNU Public License in the hope
+that it will be useful to some people out there. We use open source software
+extensively, and would like to contribute back to the community.
+We also invite you to participate in the further development of pyARS.
+Just contact me via email (axel at ergorion dot com).</p>
+<p>Find the current version at <a class="reference external" href="http://sourceforge.net/projects/pyars">Sourceforge</a></p>
+</div>
+<div class="section" id="known-issues">
+<h1>known issues</h1>
+<ul class="simple">
+<li>ARSystem API issue: Do not use ARGetMultipleEntries!
+As soon as you enable this
+function call in the ars_test.py file, mysterious crashes appear. There
+seems to be a bad memory corruption within the Remedy dll.</li>
+<li>ARSystem API issue: It seems to be fairly easy to crash your server
+with ARGetMultipleSchemas (new in 6.3).
+E.g., in our tests, setting the last parameter objPropListList to NULL was
+certain to bring the server down; therefore, ARGetMultipleSchemas will now
+provide this structure, even when you call it with a NULL value. And
+the unit tests ars_test.py check for the correct client API version (by
+comparing it to the server version), before continuing (using the client 7
+API crashed a 6.3 server with ARGetMultipleSchemas as well).</li>
+<li>ARSystem API issue: ARGetMultipleVUIs (new in 6.3) seems to be buggy in any
+ARSystem DLL that I have come across yet, in that the locale list seems to be
+corrupted. Therefore, use this function with caution!</li>
+</ul>
+</div>
+<div class="section" id="license-and-support">
+<h1>License and Support</h1>
+<p>This software is made available under the <a class="reference external" href="gpl.txt">GNU Public License</a>. However,
+if you want to sell software based on pyars, you have to get a license from us.</p>
+<p>You can get commercial support for this module. That means that you can build critical
+components on pyars and be sure to receive quick and professional support from us (Ergorion) in
+case something goes wrong in the pyars module... Please contact us at <a class="reference external" href="http://www.ergorion.com">Ergorion</a> for details.</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2004-2015, Axel Seibert.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b3.
+    </div>
+  </body>
+</html>

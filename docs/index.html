@@ -1,0 +1,253 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyARS - the swiss knife for the Remedy developer and admin &mdash; pyARS 1.8.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.8.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyARS 1.8.2 documentation" href="#" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="#">
+              <img class="logo" src="_static/ergorion_logo_klein.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyARS - the swiss knife for the Remedy developer and admin</a></li>
+<li><a class="reference internal" href="#news">News</a></li>
+<li><a class="reference internal" href="#how-do-i-get-started">How do I get started?</a></li>
+<li><a class="reference internal" href="#features-of-pyars">Features of pyARS</a></li>
+<li><a class="reference internal" href="#how-can-you-contribute">How can you contribute?</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <a class="reference external image-reference" href="download.html"><img alt="_images/btnDownload.png" src="_images/btnDownload.png" /></a>
+<a class="reference external image-reference" href="docs.html"><img alt="_images/btnDocs.png" src="_images/btnDocs.png" /></a>
+<a class="reference external image-reference" href="changes.html"><img alt="_images/btnChanges.png" src="_images/btnChanges.png" /></a>
+<div class="section" id="pyars-the-swiss-knife-for-the-remedy-developer-and-admin">
+<h1>pyARS - the swiss knife for the Remedy developer and admin</h1>
+</div>
+<div class="section" id="news">
+<h1>News</h1>
+<ul class="simple">
+<li>2015-03-08: I would like to hand over maintenance of the pyARS module to a new
+maintainer. Please contact me, if you are interested.</li>
+<li>2015-03-08: This releases fixes two bugs &#8211; one with ARSetActiveLink, the other
+with the definitions for 8.0 and 8.1 (especially under Linux). Please
+see Changes for details!</li>
+<li>2014-07-18: This releases offers the first steps to a 8.0 and 8.1 compatibility; it
+can load the libraries, but does not offer any functionality improvements yet. Please
+see Changes for details!</li>
+<li>2012-12-10: Version 1.8.0 has been released with support for 64bit under Windows
+and Solaris (see Changes for details)</li>
+<li>2012-06-21: Version 1.7.2 has been released with minor bugfixes</li>
+<li>2012-03-30: Version 1.7.1 has been released with minor bugfixes</li>
+<li>2012-02-17: Version 1.7.0 has been released, featuring cygwin support, all
+remaining 7.6 functions implemented, more robust dll/lib finding and loading,
+especially with 64bit libs, better test coverage, many more client
+server combinations tested in my test environment</li>
+<li>2012-02-05: If you want to try pyARS under Linux, you can now find
+patches for many Python releases on the <a href="#id1"><span class="problematic" id="id2">`project site &lt;http://sourceforge.net/projects/pyars/files/python-patch/`_</span></a> .</li>
+<li>2011-12-05: Version 1.6.0 has been released.</li>
+<li>2010-12-20: Version 1.5.0 comes with experimental Linux support. Please
+contact me if you are planning to use that as it currently requires
+patching the python interpreter.</li>
+<li>...</li>
+<li>2009-03-09: pyars now has a <a class="reference external" href="http://apps.sourceforge.net/wordpress/pyars/">blog</a>
+as well.</li>
+</ul>
+</div>
+<div class="section" id="how-do-i-get-started">
+<h1>How do I get started?</h1>
+<ul class="simple">
+<li>python 2.4, 2.5, 2.6 or 2.7 (available from: <a class="reference external" href="http://www.python.org">the Python website</a>;
+if you are using 2.4, you also need Thomas Heller&#8217;s excellent ctypes module,
+<a class="reference external" href="http://sourceforge.net/project/showfiles.php?group_id=71702">available from sourceforge</a>)</li>
+<li>If you want to use pyARS under Linux: you need to apply a patch to the standard
+python sources from the <a href="#id3"><span class="problematic" id="id4">`project site &lt;http://sourceforge.net/projects/pyars/files/python-patch/`_</span></a> .</li>
+<li>Have your Remedy shared libs/dlls ready; pyARS searches for them:<ol class="arabic">
+<li>on Windows: first in your PATH settings; if it doesn&#8217;t find them there, it
+will extend the search to the install directories of the user or admin tool.</li>
+<li>on cygwin: first in your PATH (just add the directory of the Windows
+dll files to the cygwin PATH): if it doesn&#8217;t find them there and you have
+installed  <a class="reference external" href="http://pypi.python.org/pypi/cygwinreg/">the module cygwinreg</a>,
+it will extend the search to the install directories of the user or admin tool.</li>
+<li>on Solaris: in your LD_LIBRARY_PATH</li>
+<li>on Linux: in your LD_LIBRARY_PATH</li>
+</ol>
+</li>
+<li>optional: if you want a decent python editor, you could download <a class="reference external" href="http://sourceforge.net/projects/pywin32/">http://sourceforge.net/projects/pywin32/</a>.
+I&#8217;m using <a class="reference external" href="http://www.eclipse.org">Eclipse</a> with <a class="reference external" href="http://pydev.org">a very good python extension</a>.</li>
+</ul>
+</div>
+<div class="section" id="features-of-pyars">
+<h1>Features of pyARS</h1>
+<p>The pyars python module allows developers to use the ARSystem (ARS) API functions
+as well as Atrium CMDB API functions to talk to and remote control any ARSystem
+or Atrium CMDB server, allowing e.g. for  extremely quick prototyping,
+data corrections, integrations with other systems, etc.</p>
+<ul>
+<li><p class="first">remote control your ARSystem and Atrium CMDB</p>
+</li>
+<li><p class="first">pyARS does not require compilation (easy to install and maintain)</p>
+</li>
+<li><p class="first">use python&#8217;s interactive shell to interactively research and manipulate
+ARSystem data structures (forms, filters, activelinks, entries, etc.).</p>
+</li>
+<li><p class="first">a wrapper object takes care of session handling and adapts itself to the
+ARSystem version available: the different API versions are automagically
+mapped to different wrapper classes that only
+expose the appropriate functions; a separate wrapper
+is available to support the CMDB (originally AROS) api and adapts itself to
+the CMDB version used.</p>
+</li>
+<li><p class="first">all(!) data structures are available as python classes</p>
+</li>
+<li><p class="first">memory management for Python objects is semi-automatic; the pythonic level
+pyars.erars tries to automate it as much as possible, including some caching.
+However, the lower level pyars.ars cannot handle the memory management. But
+with pyars, there is only one function to worry about: ARFree; just
+hand over any ARS data structure that you would like to be freed, and it will
+call the corresponding ARFree function(s).</p>
+</li>
+<li><p class="first">Comfort structures: pyars.erARS defines a couple of its own structures, that
+bring together all detail information about the object in one single place:
+ARActiveLinkStruct,  ARActiveLinkList, ARContainerStruct, AREscalationStruct,
+ARFilterStruct, ARMenuStruct, and others (see <a class="reference external" href="details.html">file details</a>
+for details).</p>
+</li>
+<li><p class="first">similarly to ARSPerl some convenience functions are provided: Login, Logoff,
+schemaExists and others. Login provides an additional feature: if you define the server name as
+&#8220;server:port&#8221; (as internet URLs usually do), you can define the port number
+for the communication.
+You can use an even tighter syntax: when creating a session instance, hand over
+the login information:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ars</span> <span class="o">=</span> <span class="n">ARS</span><span class="p">(</span><span class="s">&#39;server:port&#39;</span><span class="p">,</span> <span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p class="first">supports detailed logging (to switch on, use:</p>
+<div class="highlight-python"><div class="highlight"><pre>import logging
+ars.logger.setLevel(logging.DEBUG)
+(default is: INFO).
+</pre></div>
+</div>
+</li>
+<li><p class="first">mapping dictionaries are provided (although not complete yet) that
+translate ARS constants to usable strings, e.g.:</p>
+<div class="highlight-python"><div class="highlight"><pre>ars_const[&#39;AR_DATA_TYPE&#39;]= {
+AR_DATA_TYPE_NULL: &#39;NULL&#39;,
+AR_DATA_TYPE_KEYWORD: &#39;KEYWORD&#39;,
+AR_DATA_TYPE_INTEGER: &#39;INTEGER&#39;,
+AR_DATA_TYPE_REAL: &#39;REAL&#39;,
+...}
+</pre></div>
+</div>
+</li>
+<li><p class="first">pyARS offers two levels of access to both, standard ARSystem as well
+as BMC Atrium functionality: one is the low level C API access, the second
+is with a more pythonic approach, using standard Python data structures
+instead of C types.</p>
+</li>
+<li><p class="first">supported plattforms: currently Windows, Solaris and cygwin. Linux support
+is experimental currently, and I have no access to AIX to
+test it there.</p>
+</li>
+</ul>
+</div>
+<div class="section" id="how-can-you-contribute">
+<h1>How can you contribute?</h1>
+<p>The following is a list of issues where you could lend a helping hand:</p>
+<ul class="simple">
+<li>send in success stories (e.g. migration from C, ARSperl...) and example code</li>
+<li>try to get pyARS to run under AIX</li>
+<li>enhance the test coverage</li>
+<li>enhance documentation and doc strings</li>
+<li>help implementing outstanding functions (CMDB and ARS)</li>
+<li>...</li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="#">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2004-2015, Axel Seibert.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b3.
+    </div>
+  </body>
+</html>

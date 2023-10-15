@@ -1,0 +1,678 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyARS - from python to ARS &mdash; pyARS 1.8.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.8.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyARS 1.8.2 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/ergorion_logo_klein.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyARS - from python to ARS</a><ul>
+<li><a class="reference internal" href="#tutorial-for-usage-of-pyars-ars">Tutorial for usage of pyars.ARS</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pyars-arfunctions">pyars - ARfunctions</a></li>
+<li><a class="reference internal" href="#working-with-entries">Working with entries</a></li>
+<li><a class="reference internal" href="#a-more-detailed-look-at-retrieving-an-entry">A more detailed look at retrieving an entry</a></li>
+<li><a class="reference internal" href="#retrieve-a-list-of-entries">Retrieve a list of entries</a></li>
+<li><a class="reference internal" href="#retrieving-an-attachment-into-a-buffer">Retrieving an attachment into a buffer</a></li>
+<li><a class="reference internal" href="#retrieving-an-attachment-as-a-file">Retrieving an attachment as a file</a></li>
+<li><a class="reference internal" href="#get-a-list-of-schemas-from-an-arsystem">Get a list of schemas from an ARSystem</a></li>
+<li><a class="reference internal" href="#check-permissions-for-a-schema">Check permissions for a schema</a></li>
+<li><a class="reference internal" href="#working-with-the-xml-functions">Working with the XML functions</a></li>
+<li><a class="reference internal" href="#how-to-proceed">How to proceed</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/tutorial-ar.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyars-from-python-to-ars">
+<h1>pyARS - from python to ARS</h1>
+<div class="section" id="tutorial-for-usage-of-pyars-ars">
+<h2>Tutorial for usage of pyars.ARS</h2>
+</div>
+</div>
+<div class="section" id="pyars-arfunctions">
+<h1>pyars - ARfunctions</h1>
+<p>This tutorial covers the C-style AR functions of the ARSystem API. In
+other words, it describes how to use the functions directly exposed from
+the API and what kind of C data structures you need to access them. There is
+another <a class="reference external" href="tutorial.html">tutorial about the pythonic versions of the
+API functions</a> available.</p>
+</div>
+<div class="section" id="working-with-entries">
+<h1>Working with entries</h1>
+<p>The most often used use case is probably working with entries. Let&#8217;s see,
+how  we can retrieve, modify and create entries... We start with retrieving
+the entry with id &#8216;000000000000001&#8217; from Form User. If this does not
+exist on your server, please modify this example accordingly to match your
+environment.</p>
+<div class="highlight-python"><div class="highlight"><pre>from pyars import ars, cars
+from ctypes import *
+ars = ars.ARS()
+ars.Login(&#39;server&#39;, &#39;user&#39;, &#39;password&#39;)
+# prepare the entry-id
+tempArray = (cars.AREntryIdType * 1)()
+tempArray[0][:] = &#39;000000000000001\\0&#39;\[:] # this needs to be 16 chars
+entryId = cars.AREntryIdList(1, tempArray)
+# error handling is left as an exercise to the reader :-)
+entry = ars.ARGetEntry(&#39;User&#39;, entryId)
+</pre></div>
+</div>
+<p>&#8216;entry&#8217; now contains an ARFieldValueList with three members, one for each field.
+Each ARFieldValueStruct contains a fieldId and a value struct; the value struct
+is a C union, that needs to be referenced depending on its type. In our example,
+we would like to print out the character fields:</p>
+<div class="highlight-python"><div class="highlight"><pre>for i in range(entry.numItems):
+    if entry.fieldValueList[i].value.dataType == cars.AR_DATA_TYPE_CHAR:
+    print &#39;%d: %s&#39; % (entry.fieldValueList[i].fieldId,
+                      entry.fieldValueList[i].value.u.charVal)
+</pre></div>
+</div>
+<p>Later in this tutorial you will lern a couple of helper functions
+that will ease working with the C structures...</p>
+<p>Now let&#8217;s modify this users name...</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># prepare the data structure for the field</span>
+<span class="n">tempArray</span> <span class="o">=</span> <span class="p">(</span><span class="n">cars</span><span class="o">.</span><span class="n">ARFieldValueStruct</span> <span class="o">*</span> <span class="mi">1</span><span class="p">)()</span>
+<span class="n">tempArray</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fieldId</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">tempArray</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARValueStruct</span><span class="p">()</span>
+<span class="n">tempArray</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">dataType</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">AR_DATA_TYPE_CHAR</span>
+<span class="n">tempArray</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">charVal</span> <span class="o">=</span> <span class="s">&#39;new user name</span><span class="se">\\</span><span class="s">0&#39;</span>
+<span class="c"># ARSetEntry expects a list of such ARFieldValueStructs, even if you</span>
+<span class="c"># want to modify only a single field.</span>
+<span class="n">newFieldValue</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARFieldValueList</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">tempArray</span><span class="p">)</span>
+<span class="n">res</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">ARSetEntry</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="n">entryId</span><span class="p">,</span> <span class="n">newFieldValue</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">errnr</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;ERROR modifying entry!&#39;</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="a-more-detailed-look-at-retrieving-an-entry">
+<h1>A more detailed look at retrieving an entry</h1>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyars</span> <span class="kn">import</span> <span class="n">ars</span>
+</pre></div>
+</div>
+<p>If you run into problems at this line, pyars cannot find the Remedy libraries to
+connect to your Remedy server. On windows, that means, that you don&#8217;t have a
+user tool or admin tool installed or strange entries in the registry.
+Make sure that the path to your libraries is contained in the system path.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ars</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">ARS</span><span class="p">()</span> <span class="c"># instantiate a session object</span>
+<span class="n">connection</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">Login</span><span class="p">(</span><span class="s">&#39;server&#39;</span><span class="p">,</span> <span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">)</span> <span class="c"># store the connection</span>
+</pre></div>
+</div>
+<p>If you run into problems with any API call at any point in time, you can have
+a look at the status message, that most often explains why an API call did
+not work. In order to give you easier access to the status messages, I created a
+function called statusText() that will return the strings of the message:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ars</span><span class="o">.</span><span class="n">statusText</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Now let&#8217;s continue with our example. There are different API calls to retrieve
+form entries from an ARsystem, let&#8217;s start with ARGetEntry, and let&#8217;s fetch
+the &#8216;User&#8217; entry with entryid 1:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">form</span> <span class="o">=</span> <span class="s">&#39;User&#39;</span>
+<span class="c"># this is the entryid that we would like to retrieve:</span>
+<span class="n">entryid</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="c"># import the constant definitions (hence the c)</span>
+<span class="kn">from</span> <span class="nn">pyars</span> <span class="kn">import</span> <span class="n">cars</span>
+<span class="c"># create an array to hold the entryid:</span>
+<span class="n">tempArray</span> <span class="o">=</span> <span class="p">(</span><span class="n">cars</span><span class="o">.</span><span class="n">AREntryIdType</span> <span class="o">*</span> <span class="mi">1</span><span class="p">)()</span>
+<span class="c"># store the entryid in the first element</span>
+<span class="n">tempArray</span><span class="p">[</span><span class="mi">0</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">padEntryid</span><span class="p">(</span><span class="n">entryid</span><span class="p">)[:]</span>
+<span class="c"># create the appropriate data structure</span>
+<span class="n">idl</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">AREntryIdList</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">tempArray</span><span class="p">)</span>
+<span class="c"># finally the call</span>
+<span class="n">entry</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">ARGetEntry</span><span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">idl</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Unfortunately, we need a lot of boiler plate code until we can simply call the
+API. But this is due to the fact that an AREntryId can be more complex (in
+case of joins, e.g.).</p>
+<p>Now, that we have received something from the server, let&#8217;s have a look
+at that piece of data: When you enter</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">entry</span>
+</pre></div>
+</div>
+<p>you will see something along the following lines:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="o">&lt;</span><span class="n">pyars</span><span class="o">.</span><span class="n">_cars63</span><span class="o">.</span><span class="n">ARFieldValueList</span> <span class="nb">object</span> <span class="n">at</span> <span class="mh">0x00D07580</span><span class="o">&gt;</span>
+</pre></div>
+</div>
+<p>How does this help us? First, whenever an ARsystem data structure is a list,
+it has the attribute numItems to tell us how many elements this list holds:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">entry</span><span class="o">.</span><span class="n">numItems</span>
+</pre></div>
+</div>
+<p>In my case, it prints out 21L (that L is for the &#8220;long&#8221; data format). If you
+want to know how to access the single elements of the list, you need
+to look up the definition of the data structure in one of the _carsxx.py files
+that are specific for each ARSystem release, e.g. _cars63.py, _cars70.py etc.
+Looking up ARFieldValueList leads to the following lines (not necessarily
+next to each other...):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">ARFieldValueList</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="k">pass</span>
+<span class="n">ARFieldValueList</span><span class="o">.</span><span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="p">(</span><span class="s">&#39;numItems&#39;</span><span class="p">,</span> <span class="n">c_uint</span><span class="p">),</span>
+    <span class="p">(</span><span class="s">&#39;fieldValueList&#39;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">ARFieldValueStruct</span><span class="p">)),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>Don&#8217;t let the POINTER construct confuse you, this is just the way to say
+that this is the place to store an array of appropriate type and size.</p>
+<p>Now you could dive into those data structures, but for the beginning let
+me help you with some helper functions so that you end with rather
+Pythonic data structures...</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">convFieldValueList2Dict</span> <span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">([</span><span class="n">convFieldValueStruct2List</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">fieldValueList</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">numItems</span><span class="p">)])</span>
+<span class="k">def</span> <span class="nf">convFieldValueStruct2List</span> <span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">fieldId</span><span class="p">,</span> <span class="n">convValueStruct2Value</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">value</span><span class="p">)]</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">ARValueStruct</span><span class="o">.</span><span class="n">_mapping_so_</span> <span class="o">=</span> <span class="p">{</span> <span class="n">cars</span><span class="o">.</span><span class="n">AR_DATA_TYPE_KEYWORD</span><span class="p">:</span> <span class="s">&#39;u.keyNum&#39;</span><span class="p">,</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">AR_DATA_TYPE_INTEGER</span><span class="p">:</span> <span class="s">&#39;u.intVal&#39;</span><span class="p">,</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">AR_DATA_TYPE_REAL</span><span class="p">:</span> <span class="s">&#39;u.realVal&#39;</span><span class="p">,</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">AR_DATA_TYPE_CHAR</span><span class="p">:</span> <span class="s">&#39;u.charVal&#39;</span><span class="p">,</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">AR_DATA_TYPE_DIARY</span><span class="p">:</span> <span class="s">&#39;u.diaryVal&#39;</span><span class="p">,</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">AR_DATA_TYPE_ENUM</span><span class="p">:</span> <span class="s">&#39;u.enumVal&#39;</span><span class="p">,</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">AR_DATA_TYPE_TIME</span><span class="p">:</span> <span class="s">&#39;u.timeVal&#39;</span><span class="p">,</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">AR_DATA_TYPE_BITMASK</span><span class="p">:</span> <span class="s">&#39;u.maskVal&#39;</span><span class="p">,</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">AR_DATA_TYPE_DECIMAL</span><span class="p">:</span> <span class="s">&#39;u.decimalVal&#39;</span><span class="p">,</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">AR_DATA_TYPE_ULONG</span><span class="p">:</span> <span class="s">&#39;u.ulongVal&#39;</span><span class="p">,</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">AR_DATA_TYPE_DATE</span><span class="p">:</span> <span class="s">&#39;u.dateVal&#39;</span><span class="p">,</span>
+<span class="n">cars</span><span class="o">.</span><span class="n">AR_DATA_TYPE_TIME_OF_DAY</span><span class="p">:</span> <span class="s">&#39;u.timeOfDayVal&#39;</span> <span class="p">}</span>
+<span class="k">def</span> <span class="nf">convValueStruct2Value</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">obj</span><span class="o">.</span><span class="n">dataType</span> <span class="o">==</span> <span class="n">cars</span><span class="o">.</span><span class="n">AR_DATA_TYPE_NULL</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">return</span> <span class="nb">eval</span><span class="p">(</span><span class="s">&#39;obj.</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">_mapping_so_</span> <span class="p">[</span><span class="n">obj</span><span class="o">.</span><span class="n">dataType</span><span class="p">]))</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="k">print</span> <span class="s">&#39;unknown ARValueStruct type!&#39;</span>
+    <span class="k">return</span> <span class="bp">None</span>
+</pre></div>
+</div>
+<p>After all this, it&#8217;s now time to get to the values:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fieldValues</span> <span class="o">=</span> <span class="n">convFieldValueList2Dict</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now, you have a Python dictionary in fieldValues, where you can access all
+values based on fieldId:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">print</span> <span class="n">fieldValues</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>And finally, we can free the memory of the data structures, that were
+returned from the ARsystem:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ars</span><span class="o">.</span><span class="n">ARFree</span><span class="p">(</span><span class="n">entry</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retrieve-a-list-of-entries">
+<h1>Retrieve a list of entries</h1>
+<p>If you don&#8217;t have the entry ids, you can search for entries (ARGetListEntry) or
+even get the data for the entries returned immediately (ARGetListEntryWithFields).
+Let&#8217;s concentrate on the second and retrieve the values for the fieldids 1, 5
+and 8 for all entries in the form &#8216;User&#8217;:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># first we define a pseudo query that is always true; ignore None for now</span>
+<span class="n">query</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">ARLoadARQualifierStruct</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="bp">None</span><span class="p">,</span> <span class="s">&quot;1=1&quot;</span><span class="p">)</span>
+<span class="c"># the following is the list of fields we will retrieve for every result entry</span>
+<span class="n">fields</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">8</span><span class="p">)</span>
+<span class="c"># a little helper function to fill the ARSystem data structure</span>
+<span class="k">def</span> <span class="nf">conv2EntryListFieldList</span><span class="p">(</span><span class="n">fieldList</span><span class="p">):</span>
+    <span class="n">tempArray</span> <span class="o">=</span> <span class="p">(</span><span class="n">cars</span><span class="o">.</span><span class="n">AREntryListFieldStruct</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">fieldList</span><span class="p">))()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fieldList</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span> <span class="p">(</span><span class="n">fieldList</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">(</span><span class="nb">long</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">str</span><span class="p">)):</span>
+            <span class="n">tempArray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fieldId</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">fieldList</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">tempArray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">columnWidth</span> <span class="o">=</span> <span class="mi">10</span>
+            <span class="n">tempArray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">separator</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+    <span class="k">return</span> <span class="n">cars</span><span class="o">.</span><span class="n">AREntryListFieldList</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">fieldList</span><span class="p">),</span> <span class="n">tempArray</span><span class="p">)</span>
+<span class="c"># now use the helper function to convert the list of fields</span>
+<span class="n">arGetListFields</span> <span class="o">=</span> <span class="n">conv2EntryListFieldList</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+<span class="c"># now call the server</span>
+<span class="n">entries</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">ARGetListEntryWithFields</span><span class="p">(</span><span class="n">form</span><span class="p">,</span>
+                        <span class="n">query</span><span class="p">,</span>
+                        <span class="n">arGetListFields</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>entries now contains a tuple, consisting of an AREntryListFieldValueList and
+and integer showing the number of found entries that match the query on the form.
+On my server, entering &#8220;entries&#8221; and hitting return shows:</p>
+<div class="highlight-python"><div class="highlight"><pre>(&lt;pyars._cars63.AREntryListFieldValueList object at 0x00B76AD0&gt;, 3L)
+</pre></div>
+</div>
+<p>Now it&#8217;s time to find the entry values buried in AREntryListFieldValueList: as
+you can see, this list is somehow related to the list we had before: ARFieldValueList.
+But this time, it is used with in an AREntryList, in other words, for every
+entry we will find a ARFieldValueList. We will need some helper functions again:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">def</span> <span class="nf">convEntryListFieldValueList2Dict</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="k">return</span> <span class="nb">dict</span><span class="p">([</span><span class="n">convEntryListFieldValueStruct2List</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">entryList</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">numItems</span><span class="p">)])</span>
+<span class="k">def</span> <span class="nf">convEntryListFieldValueStruct2List</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="s">&#39;|&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">obj</span><span class="o">.</span><span class="n">entryId</span><span class="o">.</span><span class="n">entryIdList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">entryId</span><span class="o">.</span><span class="n">numItems</span><span class="p">)]),</span>
+<span class="n">convFieldValueList2Dict</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">entryValues</span><span class="o">.</span><span class="n">contents</span><span class="p">)]</span>
+<span class="c"># don&#39;t forget, that we only need to convert the first element of entries!</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">convEntryListFieldValueList2Dict</span><span class="p">(</span><span class="n">entries</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Now you have a Python dictionary that in the first hierarchy accesses the
+results by entryid, and in the second by fieldid, in other words:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s">&#39;000000000000002&#39;</span><span class="p">]</span>
+<span class="go">{8L: &#39;Axel Seibert&#39;, 1L: &#39;000000000000002&#39;, 5L: &#39;Demo&#39;}</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[&#39;000000000000003&#39;, &#39;000000000000002&#39;, &#39;000000000000001&#39;]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span><span class="p">[</span><span class="s">&#39;000000000000003&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+<span class="go">[8L, 1L, 5L]</span>
+</pre></div>
+</div>
+<p>This was interactively, but of course, it&#8217;s very easy to go through all
+the elements:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">result</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&#39;&#39;&#39;User: </span><span class="si">%s</span><span class="s"> with entryId: </span><span class="si">%s</span><span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="n">entry</span><span class="p">][</span><span class="mi">8</span><span class="p">],</span>
+                                            <span class="n">result</span><span class="p">[</span><span class="n">entry</span><span class="p">][</span><span class="mi">1</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>And when you&#8217;re done with the ARsytem data structures, as usual, it&#8217;s good
+behaviour to free the memory:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ars</span><span class="o">.</span><span class="n">ARFree</span><span class="p">(</span><span class="n">entries</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>Please note: This example leaves the error handling as an exercise to the reader;
+typically,
+you should test ars.errnr after each API call for values greater than 1 (errors)
+and possibly 1 (warning). Only the error number 0 signals a successful call.</p>
+</div>
+<div class="section" id="retrieving-an-attachment-into-a-buffer">
+<h1>Retrieving an attachment into a buffer</h1>
+<p>Compared with retrieving an entry, this is quite easy:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tempArray</span> <span class="o">=</span> <span class="p">(</span><span class="n">cars</span><span class="o">.</span><span class="n">AREntryIdType</span> <span class="o">*</span> <span class="mi">1</span><span class="p">)()</span>
+<span class="n">tempArray</span> <span class="p">[</span><span class="mi">0</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">padEntryid</span><span class="p">(</span><span class="s">&#39;yourentryid&#39;</span><span class="p">)</span> <span class="p">[:]</span>
+<span class="n">entryId</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">AREntryIdList</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">tempArray</span><span class="p">)</span>
+<span class="c"># prepare a structure for the attachment, specify option BUFFER</span>
+<span class="n">loc</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARLocStruct</span><span class="p">(</span><span class="n">cars</span><span class="o">.</span><span class="n">AR_LOC_BUFFER</span><span class="p">)</span>
+<span class="n">att</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">ARGetEntryBLOB</span> <span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">entryId</span><span class="p">,</span> <span class="mi">600010600</span><span class="p">,</span> <span class="n">loc</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">att</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">buf</span><span class="o">.</span><span class="n">bufSize</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="c"># assuming a plain text file</span>
+    <span class="k">print</span> <span class="n">string_at</span><span class="p">(</span><span class="n">att</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">buf</span><span class="o">.</span><span class="n">buffer</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="retrieving-an-attachment-as-a-file">
+<h1>Retrieving an attachment as a file</h1>
+<p>Compared with retrieving an entry, this is quite easy:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">tempArray</span> <span class="o">=</span> <span class="p">(</span><span class="n">cars</span><span class="o">.</span><span class="n">AREntryIdType</span> <span class="o">*</span> <span class="mi">1</span><span class="p">)()</span>
+<span class="n">tempArray</span> <span class="p">[</span><span class="mi">0</span><span class="p">][:]</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">padEntryid</span><span class="p">(</span><span class="s">&#39;yourentryid&#39;</span><span class="p">)</span> <span class="p">[:]</span>
+<span class="n">entryId</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">AREntryIdList</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">tempArray</span><span class="p">)</span>
+<span class="c"># prepare a structure for the attachment, specify option BUFFER</span>
+<span class="n">loc</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARLocStruct</span><span class="p">(</span><span class="n">cars</span><span class="o">.</span><span class="n">AR_LOC_FILENAME</span><span class="p">)</span>
+<span class="n">loc</span><span class="o">.</span><span class="n">u</span><span class="o">.</span><span class="n">filename</span> <span class="o">=</span> <span class="s">r&#39;c:\temp\attachment.txt&#39;</span>
+<span class="n">att</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">ARGetEntryBLOB</span> <span class="p">(</span><span class="n">form</span><span class="p">,</span> <span class="n">entryId</span><span class="p">,</span> <span class="mi">600010600</span><span class="p">,</span> <span class="n">loc</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>And the file is created in the filesystem automatically for you.</p>
+</div>
+<div class="section" id="get-a-list-of-schemas-from-an-arsystem">
+<h1>Get a list of schemas from an ARSystem</h1>
+<p>In this part we will retrieve the list of schemas from the ARSystem:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">listSchema</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">ARGetListSchema</span><span class="p">()</span>   <span class="c"># fetch a list of all schema names</span>
+<span class="k">if</span> <span class="n">ars</span><span class="o">.</span><span class="n">errnr</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">listSchema</span><span class="o">.</span><span class="n">numItems</span><span class="p">):</span>
+        <span class="k">print</span> <span class="n">listSchema</span><span class="o">.</span><span class="n">nameList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="c"># .value is necessary to access the char pointer contents</span>
+        <span class="n">schema</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">ARGetSchema</span><span class="p">(</span><span class="n">listSchema</span><span class="o">.</span><span class="n">nameList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="p">)</span> <span class="c"># now fetch the detail information for this schema</span>
+        <span class="c"># schema is one of the convenience structures...</span>
+        <span class="c"># print out the help text for this schema:</span>
+        <span class="k">print</span> <span class="n">schema</span><span class="o">.</span><span class="n">helpText</span>
+        <span class="n">ars</span><span class="o">.</span><span class="n">ARFree</span><span class="p">(</span><span class="n">schema</span><span class="p">)</span> <span class="c"># free the memory</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">print</span> <span class="s">&quot;error retrieving list of schemas!&quot;</span>
+    <span class="n">ars</span><span class="o">.</span><span class="n">ARFree</span><span class="p">(</span><span class="n">listSchema</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>What did we do? Calling ARGetListSchema returns an ARNameList. If you
+lookup this structure in ar.h, you
+will find the following definition:</p>
+<div class="highlight-python"><div class="highlight"><pre>typedef struct ARNameList
+{
+    unsigned int   numItems;
+    ARNameType    *nameList;
+}  ARNameList;                /* list of 0 or more object names */
+</pre></div>
+</div>
+<p>This has been translated to the following Python structure:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">ARNameList</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&#39;numItems&#39;</span><span class="p">,</span> <span class="n">c_uint</span><span class="p">),</span>
+                <span class="p">(</span><span class="s">&#39;nameList&#39;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">ARNameType</span><span class="p">))]</span>
+</pre></div>
+</div>
+<p>So, if you have an object of type ARNameList with name schemas, you can access
+those member variables
+as you would in C:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">schemas</span><span class="o">.</span><span class="n">numItems</span><span class="p">,</span> <span class="n">schemas</span><span class="o">.</span><span class="n">nameList</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>There is only one catch: When you want to access the contents of a char
+pointer (as opposed
+to the pointer object itself), you need to add a &#8221;.value&#8221; at the end:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">schemas</span><span class="o">.</span><span class="n">nameList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span>
+</pre></div>
+</div>
+<p>So, if there was no error retrieving the list of schema names, we can iterate
+over the resulting name list and try to fetch detailed schema information
+for each schema.</p>
+<p>So far, this looks very much like C code translated to python. How can we
+profit from python&#8217;s features? Look at the following example to see how easy it
+is to convert the C data structure into native Python structures and then to
+use Python&#8217;s libraries to work on them.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">schemaList</span> <span class="o">=</span> <span class="p">[</span><span class="n">schemas</span><span class="o">.</span><span class="n">nameList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">schemas</span><span class="o">.</span><span class="n">numItems</span><span class="p">)]</span>
+<span class="n">schemaList</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">schema</span> <span class="ow">in</span> <span class="n">schemaList</span><span class="p">:</span>
+    <span class="k">print</span> <span class="n">schema</span>
+</pre></div>
+</div>
+<p>As there is no nice structure defined by Remedy/BMC that
+would hold all relevant schema information (as retrieved by ARGetSchema) we
+came up with our own structure:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">class</span> <span class="nc">ARSchema</span><span class="p">(</span><span class="n">Structure</span><span class="p">):</span>
+    <span class="n">_fields_</span> <span class="o">=</span> <span class="p">[(</span><span class="s">&quot;name&quot;</span><span class="p">,</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARNameType</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&quot;schema&quot;</span><span class="p">,</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARCompoundSchema</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&quot;schemaInheritanceList&quot;</span><span class="p">,</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARSchemaInheritanceList</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&quot;groupList&quot;</span><span class="p">,</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARPermissionList</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&quot;admingrpList&quot;</span><span class="p">,</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARInternalIdList</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&quot;getListFields&quot;</span><span class="p">,</span>  <span class="n">cars</span><span class="o">.</span><span class="n">AREntryListFieldList</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&quot;sortList&quot;</span><span class="p">,</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARSortList</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&quot;indexList&quot;</span><span class="p">,</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARIndexList</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&quot;archiveInfo&quot;</span><span class="p">,</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARArchiveInfoStruct</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&quot;defaultVui&quot;</span><span class="p">,</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARNameType</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&quot;helpText&quot;</span><span class="p">,</span> <span class="n">c_char_p</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&quot;timestamp&quot;</span><span class="p">,</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARTimestamp</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&quot;owner&quot;</span><span class="p">,</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARAccessNameType</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&quot;lastChanged&quot;</span><span class="p">,</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARAccessNameType</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&quot;changeDiary&quot;</span><span class="p">,</span> <span class="n">c_char_p</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&quot;objPropList&quot;</span><span class="p">,</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARPropList</span><span class="p">)]</span>
+</pre></div>
+</div>
+<p>So, in a sense, those additional structures allow us to be a litte bit more
+pythonic than with the usual data structures. However, with this level
+of abstraction, pyars is still far away from being a pythonic way to access
+ARSystems. I could think of many ways to improve things (e.g. automatic
+conversion of python data structures to ARSystem C data structures, or
+exceptions instead of error numbers). Maybe with the help of the community, it
+would be possible to implement such a pythonic convenience layer on top of
+pyars.ars and pyars.cmdb?</p>
+<p>To demonstrate how you can use the lookup dictionary
+(assuming, you set up
+a connection with your ARS):</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyars</span> <span class="kn">import</span> <span class="n">cars</span>
+<span class="n">field</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">ARGetField</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="mi">7</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;field </span><span class="si">%s</span><span class="s">(</span><span class="si">%d</span><span class="s">) of type </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">field</span><span class="o">.</span><span class="n">fieldName</span><span class="p">,</span>
+                                   <span class="n">field</span><span class="o">.</span><span class="n">fieldId</span><span class="p">,</span>
+                           <span class="n">cars</span><span class="o">.</span><span class="n">ars_const</span><span class="p">[</span><span class="s">&#39;AR_DATA_TYPE&#39;</span><span class="p">][</span><span class="n">field</span><span class="o">.</span><span class="n">dataType</span><span class="p">])</span>
+<span class="n">ars</span><span class="o">.</span><span class="n">ARFree</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In the file cars.py you will find the definition of this dictionary. So if
+you want to print out something, go in there and search for the constant.</p>
+<p>At the end of your session, it&#8217;s always a good idea to logoff:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ars</span><span class="o">.</span><span class="n">Logoff</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Python makes it easy to log off from the system in any case:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">try</span><span class="p">:</span>
+    <span class="o">...</span> <span class="c"># some code</span>
+<span class="k">finally</span><span class="p">:</span>
+    <span class="n">ars</span><span class="o">.</span><span class="n">Logoff</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="check-permissions-for-a-schema">
+<h1>Check permissions for a schema</h1>
+<p>Let&#8217;s look at another example of the ARSystem data structures. Let&#8217;s
+fetch the schema information and go through the permissions...</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">schema</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">ARGetSchema</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we have an ARSchema struct in variable schema; looking at the definition
+above, you can see that the fourth attribute (groupList) contains a permissionlist.
+Let&#8217;s have a look at this list:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ARPermissionList</span><span class="o">.</span><span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+<span class="c"># ar.h 2605</span>
+<span class="p">(</span><span class="s">&#39;numItems&#39;</span><span class="p">,</span> <span class="n">c_uint</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;permissionList&#39;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">ARPermissionStruct</span><span class="p">)),</span>
+<span class="p">]</span>
+<span class="n">ARPermissionStruct</span><span class="o">.</span><span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+<span class="c"># ar.h 2598</span>
+<span class="p">(</span><span class="s">&#39;groupId&#39;</span><span class="p">,</span> <span class="n">ARInternalId</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;permissions&#39;</span><span class="p">,</span> <span class="n">c_uint</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>The list is constructed as usual, and the actual structure only contains two
+members, so iterating and printing the values should be easy:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">schema</span><span class="o">.</span><span class="n">groupList</span><span class="o">.</span><span class="n">numItems</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&#39;line #</span><span class="si">%d</span><span class="s">: groupId: </span><span class="si">%d</span><span class="s"> has permissions: </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">i</span><span class="p">,</span>
+            <span class="n">arpermissionList</span><span class="o">.</span><span class="n">permissionList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">groupId</span><span class="p">,</span>
+            <span class="n">arpermissionList</span><span class="o">.</span><span class="n">permissionList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">permissions</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This results in a basic output of the groupIds and associated permissions.
+However, if we want to lookup the groupId, we need to access
+the following data structures (as returned by ARGetListGroup).</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ARGroupInfoList</span><span class="o">.</span><span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+<span class="c"># ar.h 2638</span>
+<span class="p">(</span><span class="s">&#39;numItems&#39;</span><span class="p">,</span> <span class="n">c_uint</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;groupList&#39;</span><span class="p">,</span> <span class="n">POINTER</span><span class="p">(</span><span class="n">ARGroupInfoStruct</span><span class="p">)),</span>
+<span class="p">]</span>
+<span class="n">ARGroupInfoStruct</span><span class="o">.</span><span class="n">_fields_</span> <span class="o">=</span> <span class="p">[</span>
+<span class="c"># ar.h 2628</span>
+<span class="p">(</span><span class="s">&#39;groupId&#39;</span><span class="p">,</span> <span class="n">ARInternalId</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;groupType&#39;</span><span class="p">,</span> <span class="n">c_uint</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;groupName&#39;</span><span class="p">,</span> <span class="n">ARAccessNameList</span><span class="p">),</span>
+<span class="p">(</span><span class="s">&#39;groupCategory&#39;</span><span class="p">,</span> <span class="n">c_uint</span><span class="p">),</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<p>So let&#8217;s fetch all group information from the server, build a dictionary to
+lookup the group id&#8217;s name (it&#8217;s a bit complicated, as a single groupid can
+map to more than one name, as groupName points to an ARAccessNameList!).
+The permissions we can lookup in the lookup dictionary
+cars.ars_const[&#8216;AR_PERMISSIONS&#8217;].</p>
+<div class="highlight-python"><div class="highlight"><pre>groupList = ars.ARGetListGroup()
+lookupGroups = {} # initialize the dictionary
+for i in range(groupList.numItems):
+    groupNames = [groupList.groupList[i].groupName.nameList[j].value
+    for j in range(groupList.groupList[i].groupName.numItems)]
+        lookupGroups [groupList.groupList[i].groupId] = groupNames
+</pre></div>
+</div>
+<p>Now we have everything to have a nicer printout:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">schema</span><span class="o">.</span><span class="n">groupList</span><span class="o">.</span><span class="n">numItems</span><span class="p">):</span>
+    <span class="k">print</span> <span class="s">&#39;line #</span><span class="si">%d</span><span class="s">: group: </span><span class="si">%s</span><span class="s"> (</span><span class="si">%d</span><span class="s">) has permissions: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span>
+            <span class="n">i</span><span class="p">,</span>
+            <span class="n">lookupGroups</span><span class="p">[</span><span class="n">schema</span><span class="o">.</span><span class="n">groupList</span><span class="o">.</span><span class="n">permissionList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">groupId</span><span class="p">],</span>
+            <span class="n">schema</span><span class="o">.</span><span class="n">groupList</span><span class="o">.</span><span class="n">permissionList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">groupId</span><span class="p">,</span>
+            <span class="n">cars</span><span class="o">.</span><span class="n">ars_const</span><span class="p">[</span><span class="s">&#39;AR_PERMISSIONS&#39;</span><span class="p">][</span><span class="n">schema</span><span class="o">.</span><span class="n">groupList</span><span class="o">.</span><span class="n">permissionList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">permissions</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>And finally it&#8217;s time to logoff....</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ars</span><span class="o">.</span><span class="n">Logoff</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="working-with-the-xml-functions">
+<h1>Working with the XML functions</h1>
+<p>So far, not all XML functions have been implemented. However, with those
+functions I made sure that you can feed them the output of
+the corresponding ARGet functions (e.g. that you can feed the result
+of ARGetSchema to ARSetSchemaToXML).</p>
+<p>Writing out the definition of a schema to XML:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyars</span> <span class="kn">import</span> <span class="n">ars</span><span class="p">,</span> <span class="n">cars</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">ARS</span><span class="p">()</span>
+<span class="n">a</span><span class="o">.</span><span class="n">Login</span><span class="p">(</span><span class="s">&#39;server:port&#39;</span><span class="p">,</span> <span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">)</span>
+<span class="n">schema</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">ARGetSchema</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">)</span>
+<span class="c"># now fetch all information about the fields</span>
+<span class="c"># you need to hand over all lists that you want to be filled...</span>
+<span class="c"># however, the wrapper for ARGetMultipleFields will construct</span>
+<span class="c"># an ARFieldInfoList and return that...</span>
+<span class="n">fieldName</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARNameList</span><span class="p">()</span>
+<span class="n">fieldMap</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARFieldMappingList</span><span class="p">()</span>
+<span class="n">dataType</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARUnsignedIntList</span><span class="p">()</span>
+<span class="n">fields</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">ARGetMultipleFields</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="n">fieldName</span> <span class="o">=</span> <span class="n">fieldName</span><span class="p">,</span>
+<span class="n">fieldMap</span> <span class="o">=</span> <span class="n">fieldMap</span><span class="p">,</span>
+<span class="n">dataType</span> <span class="o">=</span> <span class="n">dataType</span><span class="p">)</span>
+<span class="c"># fetch information about the views</span>
+<span class="n">vuis</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">ARGetMultipleVUIs</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">)</span>
+<span class="c"># and write out everything to an XML string:</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">ARSetSchemaToXML</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">schema</span><span class="o">.</span><span class="n">schema</span><span class="p">,</span> <span class="n">schema</span><span class="o">.</span><span class="n">groupList</span><span class="p">,</span>
+<span class="n">schema</span><span class="o">.</span><span class="n">admingrpList</span><span class="p">,</span> <span class="n">schema</span><span class="o">.</span><span class="n">getListFields</span><span class="p">,</span>
+<span class="n">schema</span><span class="o">.</span><span class="n">sortList</span><span class="p">,</span> <span class="n">schema</span><span class="o">.</span><span class="n">indexList</span><span class="p">,</span> <span class="n">schema</span><span class="o">.</span><span class="n">archiveInfo</span><span class="p">,</span>
+<span class="n">schema</span><span class="o">.</span><span class="n">defaultVui</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">vuis</span><span class="p">,</span> <span class="n">schema</span><span class="o">.</span><span class="n">owner</span><span class="p">,</span>
+<span class="n">schema</span><span class="o">.</span><span class="n">lastChanged</span><span class="p">,</span> <span class="n">schema</span><span class="o">.</span><span class="n">timestamp</span><span class="p">,</span> <span class="n">schema</span><span class="o">.</span><span class="n">helpText</span><span class="p">,</span>
+<span class="n">schema</span><span class="o">.</span><span class="n">changeDiary</span><span class="p">,</span> <span class="n">schema</span><span class="o">.</span><span class="n">objPropList</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s">r&#39;d:\user.xml&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The example above was written for a 6.3 server. In version 7.0, the schema
+definition was extended by the auditInfo. Now, if you run the above example
+against a 7.0 server with 7.0 dlls installed on your machine, you will run
+into problems, because one argument is missing, and what&#8217;s worse, following
+arguments are off by one position.</p>
+<p>To remedy this situation, you can use positional arguments:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">result</span> <span class="o">=</span> <span class="n">ar</span><span class="o">.</span><span class="n">ARSetSchemaToXML</span><span class="p">(</span><span class="n">schemaName</span> <span class="o">=</span> <span class="s">&#39;User&#39;</span><span class="p">,</span>
+<span class="n">xmlDocHdrFtrFlag</span> <span class="o">=</span> <span class="bp">False</span><span class="p">,</span>
+<span class="n">compoundSchema</span><span class="o">=</span><span class="n">schema</span><span class="o">.</span><span class="n">schema</span><span class="p">,</span>
+<span class="n">permissionList</span><span class="o">=</span><span class="n">schema</span><span class="o">.</span><span class="n">groupList</span><span class="p">,</span>
+<span class="n">subAdminGrpList</span><span class="o">=</span><span class="n">schema</span><span class="o">.</span><span class="n">admingrpList</span><span class="p">,</span>
+<span class="n">getListFields</span><span class="o">=</span><span class="n">schema</span><span class="o">.</span><span class="n">getListFields</span><span class="p">,</span>
+<span class="n">sortList</span><span class="o">=</span><span class="n">schema</span><span class="o">.</span><span class="n">sortList</span><span class="p">,</span>
+<span class="n">indexList</span><span class="o">=</span><span class="n">schema</span><span class="o">.</span><span class="n">indexList</span><span class="p">,</span>
+<span class="n">archiveInfo</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">archiveInfo</span><span class="p">,</span>
+<span class="n">defaultVui</span> <span class="o">=</span> <span class="n">schema</span><span class="o">.</span><span class="n">defaultVui</span><span class="p">,</span>
+<span class="n">nextFieldID</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="n">coreVersion</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<span class="n">upgradeVersion</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="n">fieldInfoList</span><span class="o">=</span><span class="n">fields</span><span class="p">,</span>
+<span class="n">vuiInfoList</span><span class="o">=</span><span class="n">vuis</span><span class="p">,</span>
+<span class="n">owner</span><span class="o">=</span><span class="n">schema</span><span class="o">.</span><span class="n">owner</span><span class="p">,</span>
+<span class="n">lastModifiedBy</span><span class="o">=</span><span class="n">schema</span><span class="o">.</span><span class="n">lastChanged</span><span class="p">,</span>
+<span class="n">modifiedDate</span><span class="o">=</span><span class="n">schema</span><span class="o">.</span><span class="n">timestamp</span><span class="p">,</span>
+<span class="n">helpText</span><span class="o">=</span><span class="n">schema</span><span class="o">.</span><span class="n">helpText</span><span class="p">,</span>
+<span class="n">changeHistory</span><span class="o">=</span><span class="n">schema</span><span class="o">.</span><span class="n">changeDiary</span><span class="p">,</span>
+<span class="n">objPropList</span><span class="o">=</span><span class="n">schema</span><span class="o">.</span><span class="n">objPropList</span><span class="p">,</span>
+<span class="n">arDocVersion</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>With this code, python recognizes that the argument auditInfo is
+not handed over and will use the default value, as defined in pyars.ars
+(None).</p>
+<p>I have to admit that this is a lot of typing; to minimize the risk of
+wrong argument types, I&#8217;ve started to augment many functions (especially
+the XML functions) with asserts, that check the type of the argument.</p>
+<p>Please note the different calling convention, when compared with
+the original C API functions: whereas the C API functions expect an ARXMLDoc
+structure as the first argument, the wrapper functions take care of this
+structure, themselves. Instead, the wrapper expects the name of the object
+as the first parameter (not third), and will return an xml string (or None
+in case of failure).</p>
+</div>
+<div class="section" id="how-to-proceed">
+<h1>How to proceed</h1>
+<p>Generally speaking, you need to follow those steps:</p>
+<ul class="simple">
+<li>Identify which API function you want to call</li>
+<li>Identify which data structures this API call expects</li>
+<li>Prepare those data structures</li>
+<li>Call the API function</li>
+<li>Identify which data structures this API call returns; have a look at the
+examples in ars_test.py and cmdb_test.py, respectively. You will
+find many helpful code snippets in there.</li>
+<li>Have a look at the unit tests (ars_test.py and cmdb_test.py) which
+provide many useful examples.</li>
+<li>Give us feedback, possibly submit code, patches.</li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2004-2015, Axel Seibert.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b3.
+    </div>
+  </body>
+</html>

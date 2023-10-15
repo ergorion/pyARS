@@ -1,0 +1,196 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyARS - from python to ARS &mdash; pyARS 1.8.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.8.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyARS 1.8.2 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/ergorion_logo_klein.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyARS - from python to ARS</a><ul>
+<li><a class="reference internal" href="#examples-for-usage-of-pyars">Examples for usage of pyars</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#transferring-field-attributes-from-one-server-to-another">Transferring field attributes from one server to another</a></li>
+<li><a class="reference internal" href="#export-field-attributes-to-a-csv-file">Export Field Attributes to a CSV file</a></li>
+<li><a class="reference internal" href="#other-examples">Other examples</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/examples.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyars-from-python-to-ars">
+<h1>pyARS - from python to ARS</h1>
+<div class="section" id="examples-for-usage-of-pyars">
+<h2>Examples for usage of pyars</h2>
+</div>
+</div>
+<div class="section" id="transferring-field-attributes-from-one-server-to-another">
+<h1>Transferring field attributes from one server to another</h1>
+<p>In a project we wanted to bring over the helptexts from one form on one server
+to another form on another server, for matching fieldids.</p>
+<p>The task was to: fetch all fieldids from the original form, and then, for
+each of those fieldids, retrieve the fieldinfo from the original server,
+and set the helptext to a field of same fieldid on the target form.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">fromForm</span> <span class="o">=</span> <span class="s">&#39;form A&#39;</span>
+<span class="n">toForm</span> <span class="o">=</span> <span class="s">&#39;form B&#39;</span>
+<span class="n">numUpdates</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="kn">from</span> <span class="nn">pyars</span> <span class="kn">import</span> <span class="n">cars</span><span class="p">,</span> <span class="n">ars</span>
+<span class="n">aFrom</span><span class="o">=</span><span class="n">ars</span><span class="o">.</span><span class="n">ARS</span><span class="p">()</span>
+<span class="n">aTo</span><span class="o">=</span><span class="n">ars</span><span class="o">.</span><span class="n">ARS</span><span class="p">()</span>
+<span class="n">aFrom</span><span class="o">.</span><span class="n">Login</span><span class="p">(</span><span class="s">&#39;server1&#39;</span><span class="p">,</span> <span class="s">&#39;user1&#39;</span><span class="p">,</span> <span class="s">&#39;password1&#39;</span><span class="p">)</span>
+<span class="n">aTo</span><span class="o">.</span><span class="n">Login</span><span class="p">(</span><span class="s">&#39;server2&#39;</span><span class="p">,</span> <span class="s">&#39;user2&#39;</span><span class="p">,</span> <span class="s">&#39;password2&#39;</span><span class="p">)</span>
+<span class="n">fl</span> <span class="o">=</span> <span class="n">aFrom</span><span class="o">.</span><span class="n">ARGetListField</span><span class="p">(</span><span class="n">fromForm</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">cars</span><span class="o">.</span><span class="n">AR_FIELD_TYPE_ALL</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">fl</span><span class="o">.</span><span class="n">numItems</span><span class="p">):</span>
+    <span class="n">fieldId</span> <span class="o">=</span> <span class="n">fl</span><span class="o">.</span><span class="n">internalIdList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">toField</span> <span class="o">=</span> <span class="n">aTo</span><span class="o">.</span><span class="n">ARGetField</span><span class="p">(</span><span class="n">toForm</span><span class="p">,</span> <span class="n">fieldId</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">aTo</span><span class="o">.</span><span class="n">errnr</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">aTo</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;Field </span><span class="si">%d</span><span class="s"> does not exist on target form </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fieldId</span><span class="p">,</span>
+                                                                     <span class="n">toForm</span><span class="p">))</span>
+        <span class="k">continue</span>
+    <span class="n">fromField</span><span class="o">=</span><span class="n">aFrom</span><span class="o">.</span><span class="n">ARGetField</span><span class="p">(</span><span class="n">fromForm</span><span class="p">,</span> <span class="n">fieldId</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="n">aTo</span><span class="o">.</span><span class="n">ARSetField</span><span class="p">(</span><span class="n">toForm</span><span class="p">,</span> <span class="n">fieldId</span> <span class="p">,</span> <span class="n">helpText</span> <span class="o">=</span> <span class="n">fromField</span><span class="o">.</span><span class="n">helpText</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">result</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">aTo</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span> <span class="p">(</span><span class="s">&#39;Update to field </span><span class="si">%d</span><span class="s"> on target form </span><span class="si">%s</span><span class="s"> failed&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fieldId</span><span class="p">,</span> <span class="n">toForm</span><span class="p">))</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">numUpdates</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="n">aFrom</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%d</span><span class="s"> updates to fields on </span><span class="si">%s</span><span class="s"> were successful&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">numUpdates</span><span class="p">,</span> <span class="n">toForm</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>As you can see, this little script assumes that the first ARGetListField
+throws no error. But then, in the loop, the error handling makes sure that
+a field with the current fieldid exists on the target form, otherwise the
+loop will &#8220;continue&#8221;. Only after that check will the loop retrieve detail
+information for this fieldid from server1 (again no error check), and
+modify the field with the same fieldid and the helptext.</p>
+</div>
+<div class="section" id="export-field-attributes-to-a-csv-file">
+<h1>Export Field Attributes to a CSV file</h1>
+<p>In another project, we needed a list of all fieldnames for a given form
+together with their data types, in a CSV format.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyars</span> <span class="kn">import</span> <span class="n">ars</span><span class="p">,</span> <span class="n">cars</span>
+<span class="n">a</span><span class="o">=</span><span class="n">ars</span><span class="o">.</span><span class="n">ARS</span><span class="p">()</span>
+<span class="n">a</span><span class="o">.</span><span class="n">Login</span><span class="p">(</span><span class="s">&#39;server&#39;</span><span class="p">,</span> <span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">)</span>
+<span class="n">r</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">ARGetListField</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">)</span>
+<span class="n">fieldName</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARNameList</span><span class="p">()</span>
+<span class="n">dataType</span> <span class="o">=</span> <span class="n">cars</span><span class="o">.</span><span class="n">ARUnsignedIntList</span><span class="p">()</span>
+<span class="n">r2</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">ARGetMultipleFields</span><span class="p">(</span><span class="s">&#39;User&#39;</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">fieldName</span> <span class="o">=</span> <span class="n">fieldName</span><span class="p">,</span> <span class="n">dataType</span> <span class="o">=</span> <span class="n">dataType</span><span class="p">)</span>
+<span class="n">output</span><span class="o">=</span><span class="p">[</span><span class="s">&#39;Fieldname;Type&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">r2</span><span class="o">.</span><span class="n">numItems</span><span class="p">):</span>
+    <span class="n">output</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;</span><span class="si">%s</span><span class="s">;</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">r2</span><span class="o">.</span><span class="n">fieldList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">fieldName</span><span class="p">,</span> <span class="n">cars</span><span class="o">.</span><span class="n">ars_const</span><span class="p">[</span><span class="s">&#39;AR_DATA_TYPE&#39;</span><span class="p">][</span><span class="n">r2</span><span class="o">.</span><span class="n">fieldList</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">dataType</span><span class="p">]))</span>
+<span class="c"># create one long string</span>
+<span class="n">text</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\\</span><span class="s">n&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">output</span><span class="p">)</span>
+<span class="c"># open a file for write access</span>
+<span class="nb">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="s">&#39;c:</span><span class="se">\\\\</span><span class="s">temp</span><span class="se">\\\\</span><span class="s">fields.txt&#39;</span><span class="p">,</span> <span class="s">&#39;w&#39;</span><span class="p">)</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+<span class="nb">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">a</span><span class="o">.</span><span class="n">Logoff</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Here you can see the recommended way to handle string concatenation in Python:
+do not add several strings (e.g. &#8216;string1&#8217; + &#8216;string2&#8217;), but rather
+generate a list containing all strings and at the end use the join() function
+to join all list elements into a single string.</p>
+<p>ARGetMultipleFields (as all other ARGetMultiple functions) expect
+a list of attributes that they should fetch from the server; pyARS by
+default sets them all to None, so that when you specify nothing you will
+receive nothing. Might sound strange, on the other hand that reduces load
+on the server and network traffic...</p>
+<p>In other examples we often created &#8216;raw strings&#8217; for path information;
+then we do not need to escape the backslash (&#8216;\&#8217;). In this example I used
+a normal string, but then you can see that you need to escape every occurance
+of the backslash.</p>
+</div>
+<div class="section" id="other-examples">
+<h1>Other examples</h1>
+<p>If you want your examples included in this section, please do
+not hesitate to send them to us...</p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2004-2015, Axel Seibert.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b3.
+    </div>
+  </body>
+</html>

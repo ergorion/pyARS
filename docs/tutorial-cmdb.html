@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyARS - from python to ARS &mdash; pyARS 1.8.2 documentation</title>
+    
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.8.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="pyARS 1.8.2 documentation" href="index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/ergorion_logo_klein.jpg" alt="Logo"/>
+            </a></p>
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyARS - from python to ARS</a><ul>
+<li><a class="reference internal" href="#tutorial-for-usage-of-pyars-cmdb">Tutorial for usage of pyars.cmdb</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#pyars-cmdb-introduction">pyars.CMDB: introduction</a></li>
+</ul>
+
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/tutorial-cmdb.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyars-from-python-to-ars">
+<h1>pyARS - from python to ARS</h1>
+<div class="section" id="tutorial-for-usage-of-pyars-cmdb">
+<h2>Tutorial for usage of pyars.cmdb</h2>
+</div>
+</div>
+<div class="section" id="pyars-cmdb-introduction">
+<h1>pyars.CMDB: introduction</h1>
+<p>Here is a short example to fetch the list of all classes:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyars</span> <span class="kn">import</span> <span class="n">cmdb</span>
+</pre></div>
+</div>
+<p>If this line throws an exception, the CMDB module cannot find
+the libraries in the system path.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ars</span><span class="o">=</span><span class="n">cmdb</span><span class="o">.</span><span class="n">CMDB</span><span class="p">()</span> <span class="c"># initialize the session object</span>
+<span class="n">c</span><span class="o">=</span><span class="n">ars</span><span class="o">.</span><span class="n">Login</span><span class="p">(</span><span class="s">&#39;server:port&#39;</span><span class="p">,</span> <span class="s">&#39;user&#39;</span><span class="p">,</span> <span class="s">&#39;password&#39;</span><span class="p">)</span> <span class="c"># login to the server</span>
+<span class="n">r</span><span class="o">=</span><span class="n">ars</span><span class="o">.</span><span class="n">CMDBGetListClass</span><span class="p">()</span>  <span class="c"># this call returns a CMDBClassNameIdList</span>
+</pre></div>
+</div>
+<p>When you want to understand what the function CMDBGetListClass has
+returned to you, you have to first look at the docstring of
+the function. It will tell you that:</p>
+<div class="highlight-python"><div class="highlight"><pre>Output: classNameIdList (CMDBClassNameIdList) or None in case of failure
+</pre></div>
+</div>
+<p>So, let&#8217;s look up the definition of CMDBClassNameIdList in _ccmdbapi63.py
+(or whatever your version of the CMDB api is). Here you will find
+something along the lines of:</p>
+<div class="highlight-python"><div class="highlight"><pre>class CMDBClassNameIdList(Structure):
+pass
+CMDBClassNameIdList._fields_ = [
+# aros.h 428
+(&#39;numItems&#39;, c_uint),
+(&#39;classNameIdList&#39;, POINTER(CMDBClassNameId)),
+]
+</pre></div>
+</div>
+<p>In numItems we get the number of entries in the array classNameIdList. To find out
+how the CMDBClassNameId is defined is left as an exercise to the reader :-)
+With that knowledge we can go ahead and print out each classname (together
+with the namespaceName) in a list.</p>
+<div class="highlight-python"><div class="highlight"><pre>for i in range(r.numItems):
+print &#39;%s:%s&#39; % (r.classNameIdList[i].namespaceName,
+r.classNameIdList[i].className)
+ars.Logoff()
+</pre></div>
+</div>
+<p>If you are using an API delivered with the Atrium CMDB prior to version 1.1
+patchlevel 002, you must rename all constants with prefix &#8220;CMDB&#8221; to prefix
+&#8220;AROS&#8221;
+(e.g. AROSClassNameId instead of CMDBClassNameId). The cmdb module provides
+CMDB equivalents for all AROS function calls, so you don&#8217;t have to adapt those
+names. Unfortunately, the ctypes module will check for AROS data structures;
+therefore, providing a mapping of CMDB names to AROS names for data structures
+cannot be easily provided.</p>
+<p>Let&#8217;s assume you want to get the attributes of the base class. In
+ccmdb we define the name of the base class, so that you don&#8217;t have to change
+your code between version 1.1 and 2.0 of the CMDB. So the following should
+work with any CMDB Version 1.1 patch 002 and later.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">from</span> <span class="nn">pyars</span> <span class="kn">import</span> <span class="n">ccmdb</span>
+<span class="n">baseclass</span> <span class="o">=</span> <span class="n">ccmdb</span><span class="o">.</span><span class="n">CMDBClassNameId</span><span class="p">(</span><span class="n">ccmdb</span><span class="o">.</span><span class="n">BMC_namespace</span><span class="p">,</span> <span class="n">ccmdb</span><span class="o">.</span><span class="n">BMC_baseclass</span><span class="p">)</span>
+<span class="n">result</span> <span class="o">=</span> <span class="n">ars</span><span class="o">.</span><span class="n">CMDBGetAttribute</span><span class="p">(</span><span class="n">baseclass</span><span class="p">,</span> <span class="s">&#39;AssetID&#39;</span><span class="p">)</span>
+<span class="k">print</span> <span class="s">&#39;&#39;&#39;Name: </span><span class="si">%s</span><span class="s"></span>
+<span class="s">attributeId: </span><span class="si">%s</span><span class="s"></span>
+<span class="s">dataType: </span><span class="si">%d</span><span class="s"></span>
+<span class="s">attributeType: </span><span class="si">%d</span><span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">attributeName</span><span class="p">,</span>
+<span class="n">result</span><span class="o">.</span><span class="n">attributeId</span><span class="p">,</span>
+<span class="n">result</span><span class="o">.</span><span class="n">dataType</span><span class="p">,</span>
+<span class="n">result</span><span class="o">.</span><span class="n">attributeType</span><span class="p">)</span>
+<span class="c"># now a nicer output</span>
+<span class="k">print</span> <span class="s">&#39;&#39;&#39;Name: </span><span class="si">%s</span><span class="s"></span>
+<span class="s">attributeId: </span><span class="si">%s</span><span class="s"></span>
+<span class="s">dataType: </span><span class="si">%s</span><span class="s"></span>
+<span class="s">attributeType: </span><span class="si">%s</span><span class="s">&#39;&#39;&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">attributeName</span><span class="p">,</span>
+<span class="n">result</span><span class="o">.</span><span class="n">attributeId</span><span class="p">,</span>
+<span class="n">ccmdb</span><span class="o">.</span><span class="n">cmdb_const</span><span class="p">[</span><span class="s">&#39;CMDB_ATTR_DATA_TYPE&#39;</span><span class="p">][</span><span class="n">result</span><span class="o">.</span><span class="n">dataType</span><span class="p">],</span>
+<span class="n">ccmdb</span><span class="o">.</span><span class="n">cmdb_const</span><span class="p">[</span><span class="s">&#39;CMDB_ATTR_TYPE&#39;</span><span class="p">][</span><span class="n">result</span><span class="o">.</span><span class="n">attributeType</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>And then, you might want to fetch several attributes at once: Here is an
+example that starts with one attribute:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">cn</span> <span class="o">=</span> <span class="n">ccmdb</span><span class="o">.</span><span class="n">CMDBClassNameId</span><span class="p">(</span><span class="s">&#39;BMC&#39;</span><span class="p">,</span> <span class="s">&#39;BMC_FileSystemShare&#39;</span><span class="p">)</span>
+<span class="n">item</span> <span class="o">=</span> <span class="s">&#39;Path&#39;</span>
+<span class="n">filler</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\\</span><span class="s">0&#39;</span> <span class="o">*</span> <span class="p">(</span><span class="mi">255</span><span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+<span class="n">tempArray</span> <span class="o">=</span> <span class="p">(</span><span class="n">ccmdb</span><span class="o">.</span><span class="n">ARNameType</span> <span class="o">*</span> <span class="mi">1</span><span class="p">)()</span>
+<span class="n">tempArray</span><span class="p">[</span><span class="mi">0</span><span class="p">][:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">item</span> <span class="o">+</span> <span class="n">filler</span><span class="p">)[:]</span>
+<span class="n">nl</span> <span class="o">=</span> <span class="n">ccmdb</span><span class="o">.</span><span class="n">ARNameList</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">tempArray</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">CMDBGetMultipleAttribute</span><span class="p">(</span><span class="n">cn</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="bp">True</span><span class="p">,</span> <span class="n">nl</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyARS 1.8.2 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2004-2015, Axel Seibert.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.3b3.
+    </div>
+  </body>
+</html>
